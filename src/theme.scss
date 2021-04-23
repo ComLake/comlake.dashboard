@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900');
+
+// Options
+//
+// Quickly modify global styling by enabling or disabling optional features.
+
+$enable-rounded:            true !default;
+$enable-shadows:            true;
+$enable-transitions:        true;
+$enable-hover-media-query:  false;
+$enable-grid-classes:       true;
+$enable-print-styles:       true;
+
+// Variables
+//
+// Colors
+
+$theme-colors: (
+  primary: #11A1FD,
+  secondary: #7D9EB5,
+  light: #f3f3f3,
+  dark: #223345,
+  info: #5A75F8,
+  success: #07C180,
+  warning: #FF9931,
+  danger: #dc3545
+);
+
+$body-bg: #ffffff;
+$body-color: #223345;
+
+
+$body-color-inverse: invert($body-color) !default;
+$link-color: #07C180;
+
+// Fonts
+$font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$headings-font-family: 'Inter', sans-serif;
+$display-font-family: $font-family-base;
+$font-weight-normal: 400;
+$headings-font-weight: 300;
+$lead-font-size:   1.30rem;
+
+$spacer: 1.5rem;
