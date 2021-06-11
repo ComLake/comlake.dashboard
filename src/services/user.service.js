@@ -13,13 +13,11 @@ class UserDataService {
   }
 
   create(data) {
-    console.log(data);
-    return axios.post(API_URL + "/users", { headers: authHeader(), data: data });
+    return axios.post(API_URL + "/users", data, { headers: authHeader() });
   }
 
   update(id, data) {
-    console.log(data);
-    return axios.put(API_URL + `/users/${id}`, { headers: authHeader(), data: data });
+    return axios.put(API_URL + `/users/${id}`, data, { headers: authHeader() });
   }
 
   delete(id) {
