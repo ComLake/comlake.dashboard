@@ -7,9 +7,9 @@ import {
 
 import UserDataService from "../services/user.service";
 
-export const createUser = (title, description) => async (dispatch) => {
+export const createUser = (username, email, password, firstname, lastname, department, affiliation) => async (dispatch) => {
   try {
-    const res = await UserDataService.create({ title, description });
+    const res = await UserDataService.create({ username, email, password, firstname, lastname, department, affiliation });
 
     dispatch({
       type: CREATE_USER,

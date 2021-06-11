@@ -64,7 +64,7 @@ class UsersList extends Component {
             <input
               type="text"
               className="form-control"
-              placeholder="Search by title"
+              placeholder="Search by Username"
               value={searchUsername}
               onChange={this.onChangeSearchUsername}
             />
@@ -93,7 +93,7 @@ class UsersList extends Component {
                   onClick={() => this.setActiveUser(user, index)}
                   key={index}
                 >
-                  {user.title}
+                  {user.username}
                 </li>
               ))}
           </ul>
@@ -106,7 +106,7 @@ class UsersList extends Component {
                 <label>
                   <strong>Username:</strong>
                 </label>{" "}
-                {currentUser.title}
+                {currentUser.username}
               </div>
               <div>
                 <label>

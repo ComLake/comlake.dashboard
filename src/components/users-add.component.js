@@ -5,8 +5,13 @@ import { createUser } from "../actions/users";
 class AddUser extends Component {
   constructor(props) {
     super(props);
-    this.onChangeTitle = this.onChangeTitle.bind(this);
-    this.onChangeDescription = this.onChangeDescription.bind(this);
+    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangeFirstname = this.onChangeFirstname.bind(this);
+    this.onChangeLastname = this.onChangeLastname.bind(this);
+    this.onChangeDepartment = this.onChangeDepartment.bind(this);
+    this.onChangeAffiliation = this.onChangeAffiliation.bind(this);
     this.saveUser = this.saveUser.bind(this);
     this.newUser = this.newUser.bind(this);
 
@@ -24,23 +29,54 @@ class AddUser extends Component {
     };
   }
 
-  onChangeTitle(e) {
+  onChangeUsername(e) {
     this.setState({
       username: e.target.value,
     });
   }
 
-  onChangeDescription(e) {
+  onChangeEmail(e) {
+    this.setState({
+      email: e.target.value,
+    });
+  }
+
+  onChangePassword(e) {
+    this.setState({
+      password: e.target.value,
+    });
+  }
+
+  onChangeFirstname(e) {
     this.setState({
       firstname: e.target.value,
     });
   }
 
+  onChangeLastname(e) {
+    this.setState({
+      lastname: e.target.value,
+    });
+  }
+
+  onChangeDepartment(e) {
+    this.setState({
+      department: e.target.value,
+    });
+  }
+
+  onChangeAffiliation(e) {
+    this.setState({
+      affiliation: e.target.value,
+    });
+  }
+
+
   saveUser() {
-    const { username, firstname } = this.state;
+    const { username, email, password, firstname, lastname, department, affiliation } = this.state;
 
     this.props
-      .createUser(username, firstname)
+      .createUser(username, email, password, firstname, lastname, department, affiliation)
       .then((data) => {
         this.setState({
           id: data.id,
@@ -96,7 +132,7 @@ class AddUser extends Component {
                 id="username"
                 required
                 value={this.state.username}
-                onChange={this.onChangeTitle}
+                onChange={this.onChangeUsername}
                 name="username"
               />
             </div>
@@ -109,7 +145,7 @@ class AddUser extends Component {
                 id="email"
                 required
                 value={this.state.email}
-                onChange={this.onChangeTitle}
+                onChange={this.onChangeEmail}
                 name="email"
               />
             </div>
@@ -122,7 +158,7 @@ class AddUser extends Component {
                 id="password"
                 required
                 value={this.state.password}
-                onChange={this.onChangeTitle}
+                onChange={this.onChangePassword}
                 name="password"
               />
             </div>
@@ -134,7 +170,7 @@ class AddUser extends Component {
                 className="form-control"
                 id="firstname"
                 value={this.state.firstname}
-                onChange={this.onChangeDescription}
+                onChange={this.onChangeFirstname}
                 name="firstname"
               />
             </div>
@@ -146,7 +182,7 @@ class AddUser extends Component {
                 className="form-control"
                 id="lastname"
                 value={this.state.lastname}
-                onChange={this.onChangeDescription}
+                onChange={this.onChangeLastname}
                 name="lastname"
               />
             </div>
@@ -159,7 +195,7 @@ class AddUser extends Component {
                 id="department"
                 required
                 value={this.state.department}
-                onChange={this.onChangeTitle}
+                onChange={this.onChangeDepartment}
                 name="department"
               />
             </div>
@@ -172,7 +208,7 @@ class AddUser extends Component {
                 id="affiliation"
                 required
                 value={this.state.affiliation}
-                onChange={this.onChangeTitle}
+                onChange={this.onChangeAffiliation}
                 name="affiliation"
               />
             </div>
