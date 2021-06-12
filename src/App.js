@@ -9,12 +9,10 @@ import Login from "./components/login.component";
 import Register from "./components/register.component";
 import Home from "./components/home.component";
 import Profile from "./components/profile.component";
-import BoardUser from "./components/board-user.component";
-import BoardAdmin from "./components/board-admin.component";
-
 import AddUser from "./components/users-add.component";
 import User from "./components/users-edit.component";
 import UsersList from "./components/users-list.component";
+import UploadFiles from "./components/upload-files.component";
 
 import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
@@ -27,7 +25,6 @@ class App extends Component {
     this.logOut = this.logOut.bind(this);
 
     this.state = {
-      showModeratorBoard: false,
       showAdminBoard: false,
       currentUser: undefined,
     };
@@ -69,29 +66,24 @@ class App extends Component {
                 </Link>
               </li>
 
-              <li className="nav-item">
-                <Link to={"/users"} className="nav-link">
-                  Users
-                </Link>
-              </li>
+              {showAdminBoard && (
+                <li className="nav-item">
+                  <Link to={"/users"} className="nav-link">
+                    Users
+                  </Link>
+                </li>
+              )}
+
               <li className="nav-item">
                 <Link to={"/add"} className="nav-link">
                   Add
                 </Link>
               </li>
 
-              {showAdminBoard && (
-                <li className="nav-item">
-                  <Link to={"/admin"} className="nav-link">
-                    Admin Board
-                  </Link>
-                </li>
-              )}
-
               {currentUser && (
                 <li className="nav-item">
-                  <Link to={"/user"} className="nav-link">
-                    User
+                  <Link to={"/add-files"} className="nav-link">
+                    Upload Files
                   </Link>
                 </li>
               )}
@@ -133,11 +125,10 @@ class App extends Component {
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/profile" component={Profile} />
-              <Route path="/user" component={BoardUser} />
-              <Route path="/admin" component={BoardAdmin} />
               <Route exact path="/users" component={UsersList} />
               <Route exact path="/add" component={AddUser} />
               <Route path="/users/:id" component={User} />
+              <Route exact path="/add-files" component={UploadFiles} />
             </Switch>
           </div>
         </div>
