@@ -55,7 +55,7 @@ class App extends Component {
 
     return (
       <Router history={history}>
-        <div>
+        <div className="wrapper">
           <Navbar collapseOnSelect bg="primary" variant="dark" expand="lg" sticky="top">
             <Navbar.Brand href="/">Ulake</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
