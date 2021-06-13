@@ -4,6 +4,7 @@ import { Router, Switch, Route, Link } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import { Navbar,Nav,NavDropdown,Form,FormControl,Button } from 'react-bootstrap'
 
 import Login from "./components/login.component";
 import Register from "./components/register.component";
@@ -55,69 +56,42 @@ class App extends Component {
     return (
       <Router history={history}>
         <div>
-          <nav className="navbar navbar-expand navbar-dark bg-primary">
-            <Link to={"/"} className="navbar-brand">
-              Ulake
-            </Link>
-            <div className="navbar-nav mr-auto">
-              <li className="nav-item">
-                <Link to={"/home"} className="nav-link">
-                  Home
-                </Link>
-              </li>
-
-              {showAdminBoard && (
-                <li className="nav-item">
-                  <Link to={"/users"} className="nav-link">
-                    Users
-                  </Link>
-                </li>
-              )}
-
-              <li className="nav-item">
-                <Link to={"/add"} className="nav-link">
-                  Add
-                </Link>
-              </li>
-
-              {currentUser && (
-                <li className="nav-item">
-                  <Link to={"/add-files"} className="nav-link">
-                    Upload Files
-                  </Link>
-                </li>
-              )}
-            </div>
-
+          <Navbar collapseOnSelect bg="primary" variant="dark" expand="lg" sticky="top">
+            <Navbar.Brand href="/">Ulake</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="mr-auto">
+                <Nav.Link href="/home">Home</Nav.Link>
+                {showAdminBoard && (
+                  <Nav.Link href="/users">Users</Nav.Link>
+                )}
+                {showAdminBoard && (
+                  <Nav.Link href="/add">Add User</Nav.Link>
+                )}
+                {currentUser && (
+                  <Nav.Link href="/add-files">Add File</Nav.Link>
+                )}
+                <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+                    <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                    <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+                    <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                </NavDropdown>
+                </Nav>
+            </Navbar.Collapse>
             {currentUser ? (
               <div className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <Link to={"/profile"} className="nav-link">
-                    {currentUser.username}
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <a href="/login" className="nav-link" onClick={this.logOut}>
-                    LogOut
-                  </a>
-                </li>
+                <Nav.Link href="/profile">{currentUser.username}</Nav.Link>
+                <Nav.Link href="/login" onClick={this.logOut}>Logout</Nav.Link>
               </div>
             ) : (
               <div className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <Link to={"/login"} className="nav-link">
-                    Login
-                  </Link>
-                </li>
-
-                <li className="nav-item">
-                  <Link to={"/register"} className="nav-link">
-                    Sign Up
-                  </Link>
-                </li>
+                <Nav.Link href="/login">Login</Nav.Link>
+                <Nav.Link href="/register">Sign Up</Nav.Link>
               </div>
             )}
-          </nav>
+          </Navbar>
 
           <div className="container mt-3">
             <Switch>
