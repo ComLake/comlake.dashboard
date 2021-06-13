@@ -1,66 +1,66 @@
-export const styles = {
-    appBar: {
-        backgroundColor: "#343A40",
-        height: "50px",
-        '& .MuiToolbar-regular': {
-            minHeight: "50px"
-        }
+const drawerWidth = 240;
+
+export const styles = theme => ({
+  root: {
+    display: 'flex',
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  menuButton: {
+    marginRight: 36,
+  },
+  hide: {
+    display: 'none',
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+  },
+  drawerOpen: {
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerClose: {
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: theme.spacing(7) + 1,
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing(9) + 1,
     },
-    name: {
-        marginRight: "15px"
-    },
-    link: {
-        textTransform: "unset",
-        color: "#a5a5a5",
-        margin: "0 20px",
-        textDecoration: "unset"
-    },
-    form: {
-        marginLeft: "50px"
-    },
-    textField: {
-        margin: "15px 0"
-    },
-    search: {
-        marginTop: "15px"
-    },
-    detail: {
-        margin: "5px 0"
-    },
-    edit: {
-        backgroundColor: "orange",
-        border: "4px solid orange",
-        borderRadius: "5px",
-        textDecoration: "none",
-        fontSize: "13px",
-        fontWeight: "bold",
-        color: "white"
-    },
-    delete: {
-        backgroundColor: "#DD4145",
-        "&:hover": {
-            backgroundColor: "#DD4145",
-            opacity: 0.8
-        }
-    },
-    update: {
-        backgroundColor: "#64A845",
-        "&:hover": {
-            backgroundColor: "#64A845",
-            opacity: 0.8
-        }
-    },
-    buttonWrapper: {
-        marginTop: "20px"
-    },
-    button: {
-        marginRight: "15px",
-        color: "white",
-        fontSize: "13px",
-        textTransform: "none",
-        height: "25px"
-    },
-    user: {
-        marginLeft: "25px"
-    }
-};
+  },
+  toolbar: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+  title: {
+      flexGrow: 1,
+  },
+});
