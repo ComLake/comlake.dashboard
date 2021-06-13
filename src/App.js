@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Switch, Route, Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import { styles } from "./css-common"
+import { AppBar, Toolbar, Typography, withStyles } from '@material-ui/core';
 
 import AuthService from "./services/auth.service";
 
@@ -9,8 +10,10 @@ import Login from "./components/login.component";
 import Register from "./components/register.component";
 import Home from "./components/home.component";
 import Profile from "./components/profile.component";
-import BoardUser from "./components/board-user.component";
-import BoardAdmin from "./components/board-admin.component";
+
+import AddUser from "./components/users-add.component";
+import User from "./components/users-edit.component";
+import UsersList from "./components/users-list.component";
 
 class App extends Component {
   constructor(props) {
@@ -41,80 +44,81 @@ class App extends Component {
 
   render() {
     const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
+    const { classes } = this.props
 
     return (
       <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <Link to={"/"} className="navbar-brand">
-            Ulake
+        <AppBar className={classes.appBar} position="static">
+          <Toolbar>
+          <Link to={"/"} className={classes.link}>
+            <Typography className={classes.name} variant="h6">
+                Ulake
+            </Typography>
           </Link>
-          <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to={"/home"} className="nav-link">
+
+          <Link to={"/home"} className={classes.link}>
+            <Typography className={classes.name} >
                 Home
-              </Link>
-            </li>
-
-            {showAdminBoard && (
-              <li className="nav-item">
-                <Link to={"/admin"} className="nav-link">
-                  Admin Board
-                </Link>
-              </li>
-            )}
-
-            {currentUser && (
-              <li className="nav-item">
-                <Link to={"/user"} className="nav-link">
-                  User
-                </Link>
-              </li>
-            )}
-          </div>
+            </Typography>
+          </Link>
+          {showAdminBoard && (
+            <Link to={"/users"} className={classes.link}>
+              <Typography className={classes.name}>
+              Users
+              </Typography>
+            </Link>
+          )}
+          {showAdminBoard && (
+            <Link to={"/add"} className={classes.link}>
+              <Typography className={classes.name}>
+              Add User
+              </Typography>
+            </Link>
+          )}
 
           {currentUser ? (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to={"/profile"} className="nav-link">
-                  {currentUser.username}
-                </Link>
-              </li>
-              <li className="nav-item">
-                <a href="/login" className="nav-link" onClick={this.logOut}>
-                  LogOut
-                </a>
-              </li>
-            </div>
+            <Toolbar>
+            <Link to={"/profile"} className={classes.link}>
+              <Typography className={classes.name}>
+              {currentUser.username}
+              </Typography>
+            </Link>
+
+            <Link to={"/login"} className={classes.link} onClick={this.logOut}>
+              <Typography className={classes.name}>
+                Log Out
+              </Typography>
+            </Link>
+            </Toolbar>
           ) : (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to={"/login"} className="nav-link">
+            <Toolbar>
+              <Link to={"/login"} className={classes.link}>
+                <Typography className={classes.name}>
                   Login
-                </Link>
-              </li>
-
-              <li className="nav-item">
-                <Link to={"/register"} className="nav-link">
-                  Sign Up
-                </Link>
-              </li>
-            </div>
+                </Typography>
+              </Link>
+              <Link to={"/register"} className={classes.link}>
+                <Typography className={classes.name}>
+                  Register
+                </Typography>
+              </Link>
+            </Toolbar>
           )}
-        </nav>
+          </Toolbar>
+        </AppBar>
 
-        <div className="container mt-3">
-          <Switch>
-            <Route exact path={["/", "/home"]} component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/profile" component={Profile} />
-            <Route path="/user" component={BoardUser} />
-            <Route path="/admin" component={BoardAdmin} />
-          </Switch>
-        </div>
+        <Switch>
+          <Route exact path={["/", "/home"]} component={Home} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/profile" component={Profile} />
+          <Route exact path="/users" component={UsersList} />
+          <Route exact path="/add" component={AddUser} />
+          <Route path="/users/:id" component={User} />
+        </Switch>
       </div>
     );
   }
 }
 
-export default App;
+export default withStyles(styles)(App);
