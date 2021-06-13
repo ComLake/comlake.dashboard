@@ -14,6 +14,7 @@ import Profile from "./components/profile.component";
 import AddUser from "./components/users-add.component";
 import User from "./components/users-edit.component";
 import UsersList from "./components/users-list.component";
+import UploadFiles from "./components/upload-files.component";
 
 class App extends Component {
   constructor(props) {
@@ -76,6 +77,14 @@ class App extends Component {
             </Link>
           )}
 
+          {currentUser && (
+            <Link to={"/add-files"} className={classes.link}>
+              <Typography className={classes.name}>
+              Add File
+              </Typography>
+            </Link>
+          )}
+
           {currentUser ? (
             <Toolbar>
             <Link to={"/profile"} className={classes.link}>
@@ -115,6 +124,7 @@ class App extends Component {
           <Route exact path="/users" component={UsersList} />
           <Route exact path="/add" component={AddUser} />
           <Route path="/users/:id" component={User} />
+          <Route exact path="/add-files" component={UploadFiles} />
         </Switch>
       </div>
     );

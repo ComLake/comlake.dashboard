@@ -1,5 +1,22 @@
 import React, { Component } from "react";
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { Box, Typography, Button, ListItem, withStyles } from '@material-ui/core';
+
 import UploadService from "../services/upload-files.service";
+
+const BorderLinearProgress = withStyles((theme) => ({
+  root: {
+    height: 15,
+    borderRadius: 5,
+  },
+  colorPrimary: {
+    backgroundColor: "#EEEEEE",
+  },
+  bar: {
+    borderRadius: 5,
+    backgroundColor: '#1a90ff',
+  },
+}))(LinearProgress);
 
 export default class UploadFiles extends Component {
   constructor(props) {
@@ -12,7 +29,7 @@ export default class UploadFiles extends Component {
       currentFile: undefined,
       progress: 0,
       message: "",
-
+      isError: false,
       fileInfos: [],
     };
   }
@@ -47,6 +64,7 @@ export default class UploadFiles extends Component {
       .then((response) => {
         this.setState({
           message: response.data.message,
+          isError: false
         });
         return UploadService.getFiles();
       })
@@ -60,6 +78,7 @@ export default class UploadFiles extends Component {
           progress: 0,
           message: "Could not upload the file!",
           currentFile: undefined,
+          isError: true
         });
       });
 
@@ -75,53 +94,67 @@ export default class UploadFiles extends Component {
       progress,
       message,
       fileInfos,
+      isError
     } = this.state;
 
     return (
-      <div>
+      <div className="mg20">
         {currentFile && (
-          <div className="progress">
-            <div
-              className="progress-bar progress-bar-info progress-bar-striped"
-              role="progressbar"
-              aria-valuenow={progress}
-              aria-valuemin="0"
-              aria-valuemax="100"
-              style={{ width: progress + "%" }}
-            >
-              {progress}%
-            </div>
-          </div>
-        )}
+          <Box className="mb25" display="flex" alignItems="center">
+            <Box width="100%" mr={1}>
+              <BorderLinearProgress variant="determinate" value={progress} />
+            </Box>
+            <Box minWidth={35}>
+              <Typography variant="body2" color="textSecondary">{`${progress}%`}</Typography>
+            </Box>
+          </Box>)
+        }
 
-        <label className="btn btn-default">
-          <input type="file" onChange={this.selectFile} />
+        <label htmlFor="btn-upload">
+          <input
+            id="btn-upload"
+            name="btn-upload"
+            style={{ display: 'none' }}
+            type="file"
+            onChange={this.selectFile} />
+          <Button
+            className="btn-choose"
+            variant="outlined"
+            component="span" >
+             Choose Files
+          </Button>
         </label>
-
-        <button
-          className="btn btn-success"
+        <div className="file-name">
+        {selectedFiles && selectedFiles.length > 0 ? selectedFiles[0].name : null}
+        </div>
+        <Button
+          className="btn-upload"
+          color="primary"
+          variant="contained"
+          component="span"
           disabled={!selectedFiles}
-          onClick={this.upload}
-        >
+          onClick={this.upload}>
           Upload
-        </button>
+        </Button>
 
-        <div className="alert alert-light" role="alert">
+        <Typography variant="subtitle2" className={`upload-message ${isError ? "error" : ""}`}>
           {message}
-        </div>
+        </Typography>
 
-        <div className="card">
-          <div className="card-header">List of Files</div>
-          <ul className="list-group list-group-flush">
-            {fileInfos &&
-              fileInfos.map((file, index) => (
-                <li className="list-group-item" key={index}>
-                  <a href={file.url}>{file.name}</a>
-                </li>
-              ))}
-          </ul>
-        </div>
-      </div>
+        <Typography variant="h6" className="list-header">
+          List of Files
+          </Typography>
+        <ul className="list-group">
+          {fileInfos &&
+            fileInfos.map((file, index) => (
+              <ListItem
+                divider
+                key={index}>
+                <a href={file.url}>{file.name}</a>
+              </ListItem>
+            ))}
+        </ul>
+      </div >
     );
   }
 }
