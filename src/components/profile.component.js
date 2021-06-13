@@ -1,42 +1,61 @@
 import React, { Component } from "react";
-import { Redirect } from 'react-router-dom';
-import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import AuthService from "../services/auth.service";
 
-class Profile extends Component {
+export default class Profile extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      redirect: null,
+      userReady: false,
+      currentUser: { username: "" }
+    };
+  }
+
+  componentDidMount() {
+    const currentUser = AuthService.getCurrentUser();
+
+    if (!currentUser) this.setState({ redirect: "/home" });
+    this.setState({ currentUser: currentUser, userReady: true })
+  }
 
   render() {
-    const { user: currentUser } = this.props;
-
-    if (!currentUser) {
-      return <Redirect to="/login" />;
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />
     }
+
+    const { currentUser } = this.state;
 
     return (
       <div className="container">
+        {(this.state.userReady) ?
+        <div>
+        <header className="jumbotron">
           <h3>
-            Profile <strong>{currentUser.username}</strong>
+            <strong>{currentUser.username}</strong> Profile
           </h3>
+        </header>
         <p>
-          <strong>ID:</strong> {currentUser.id}
+          <strong>Token:</strong>{" "}
+          {currentUser.accessToken.substring(0, 20)} ...{" "}
+          {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
         </p>
         <p>
-          <strong>Email:</strong> {currentUser.email}
+          <strong>Id:</strong>{" "}
+          {currentUser.id}
+        </p>
+        <p>
+          <strong>Email:</strong>{" "}
+          {currentUser.email}
         </p>
         <strong>Authorities:</strong>
         <ul>
           {currentUser.roles &&
             currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
         </ul>
+      </div>: null}
       </div>
     );
   }
 }
-
-function mapStateToProps(state) {
-  const { user } = state.auth;
-  return {
-    user,
-  };
-}
-
-export default connect(mapStateToProps)(Profile);

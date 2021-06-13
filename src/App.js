@@ -1,24 +1,16 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Router, Switch, Route, Link } from "react-router-dom";
-
+import { Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { Navbar,Nav,NavDropdown,Form,FormControl,Button } from 'react-bootstrap'
+
+import AuthService from "./services/auth.service";
 
 import Login from "./components/login.component";
 import Register from "./components/register.component";
 import Home from "./components/home.component";
 import Profile from "./components/profile.component";
-import AddUser from "./components/users-add.component";
-import User from "./components/users-edit.component";
-import UsersList from "./components/users-list.component";
-import UploadFiles from "./components/upload-files.component";
-
-import { logout } from "./actions/auth";
-import { clearMessage } from "./actions/message";
-
-import { history } from './helpers/history';
+import BoardUser from "./components/board-user.component";
+import BoardAdmin from "./components/board-admin.component";
 
 class App extends Component {
   constructor(props) {
@@ -26,17 +18,14 @@ class App extends Component {
     this.logOut = this.logOut.bind(this);
 
     this.state = {
+      showModeratorBoard: false,
       showAdminBoard: false,
       currentUser: undefined,
     };
-
-    history.listen((location) => {
-      props.dispatch(clearMessage()); // clear message when changing location
-    });
   }
 
   componentDidMount() {
-    const user = this.props.user;
+    const user = AuthService.getCurrentUser();
 
     if (user) {
       this.setState({
@@ -47,75 +36,85 @@ class App extends Component {
   }
 
   logOut() {
-    this.props.dispatch(logout());
+    AuthService.logout();
   }
 
   render() {
-    const { currentUser, showAdminBoard } = this.state;
+    const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
 
     return (
-      <Router history={history}>
-        <div className="wrapper">
-          <Navbar collapseOnSelect bg="primary" variant="dark" expand="lg" sticky="top">
-            <Navbar.Brand href="/">Ulake</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">
-                <Nav.Link href="/home">Home</Nav.Link>
-                {showAdminBoard && (
-                  <Nav.Link href="/users">Users</Nav.Link>
-                )}
-                {showAdminBoard && (
-                  <Nav.Link href="/add">Add User</Nav.Link>
-                )}
-                {currentUser && (
-                  <Nav.Link href="/add-files">Add File</Nav.Link>
-                )}
-                <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                    <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                </NavDropdown>
-                </Nav>
-            </Navbar.Collapse>
-            {currentUser ? (
-              <div className="navbar-nav ml-auto">
-                <Nav.Link href="/profile">{currentUser.username}</Nav.Link>
-                <Nav.Link href="/login" onClick={this.logOut}>Logout</Nav.Link>
-              </div>
-            ) : (
-              <div className="navbar-nav ml-auto">
-                <Nav.Link href="/login">Login</Nav.Link>
-                <Nav.Link href="/register">Sign Up</Nav.Link>
-              </div>
-            )}
-          </Navbar>
+      <div>
+        <nav className="navbar navbar-expand navbar-dark bg-dark">
+          <Link to={"/"} className="navbar-brand">
+            Ulake
+          </Link>
+          <div className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <Link to={"/home"} className="nav-link">
+                Home
+              </Link>
+            </li>
 
-          <div className="container mt-3">
-            <Switch>
-              <Route exact path={["/", "/home"]} component={Home} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/profile" component={Profile} />
-              <Route exact path="/users" component={UsersList} />
-              <Route exact path="/add" component={AddUser} />
-              <Route path="/users/:id" component={User} />
-              <Route exact path="/add-files" component={UploadFiles} />
-            </Switch>
+            {showAdminBoard && (
+              <li className="nav-item">
+                <Link to={"/admin"} className="nav-link">
+                  Admin Board
+                </Link>
+              </li>
+            )}
+
+            {currentUser && (
+              <li className="nav-item">
+                <Link to={"/user"} className="nav-link">
+                  User
+                </Link>
+              </li>
+            )}
           </div>
+
+          {currentUser ? (
+            <div className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <Link to={"/profile"} className="nav-link">
+                  {currentUser.username}
+                </Link>
+              </li>
+              <li className="nav-item">
+                <a href="/login" className="nav-link" onClick={this.logOut}>
+                  LogOut
+                </a>
+              </li>
+            </div>
+          ) : (
+            <div className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <Link to={"/login"} className="nav-link">
+                  Login
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <Link to={"/register"} className="nav-link">
+                  Sign Up
+                </Link>
+              </li>
+            </div>
+          )}
+        </nav>
+
+        <div className="container mt-3">
+          <Switch>
+            <Route exact path={["/", "/home"]} component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/profile" component={Profile} />
+            <Route path="/user" component={BoardUser} />
+            <Route path="/admin" component={BoardAdmin} />
+          </Switch>
         </div>
-      </Router>
+      </div>
     );
   }
 }
 
-function mapStateToProps(state) {
-  const { user } = state.auth;
-  return {
-    user,
-  };
-}
-
-export default connect(mapStateToProps)(App);
+export default App;
