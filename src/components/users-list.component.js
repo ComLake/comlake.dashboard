@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import UserDataService from "../services/user.service";
 import { Link } from "react-router-dom";
+import { DataGrid } from '@material-ui/data-grid';
 
 import { styles } from "../css-common"
 import { TextField, Button, Grid, ListItem, withStyles } from "@material-ui/core";
@@ -78,7 +79,15 @@ class UsersList extends Component {
   render() {
     const { classes } = this.props
     const { findByUsername, users, currentUser, currentIndex } = this.state;
-
+    const columns = [
+      { field: "id", headerName: "ID", width: 10 },
+      { field: "username", headerName: "Username", width: 170 },
+      { field: "email", headerName: "Email", width: 70 },
+      { field: "firstname", headerName: "First Name", width: 70 },
+      { field: "lastname", headerName: "Last Name", width: 70 },
+      { field: "department", headerName: "Department", width: 70 },
+      { field: "affiliation", headerName: "Affiliation", width: 70 },
+    ];
     return (
       <div className={classes.form}>
         <Grid container>
