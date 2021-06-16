@@ -113,16 +113,6 @@ class Login extends Component {
             </Button>
           </form>
         </div>
-        <Box mt={8}>
-          <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="/">
-              Ulake
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-          </Typography>
-        </Box>
       </Container>
     );
   }

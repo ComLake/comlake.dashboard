@@ -3,7 +3,7 @@ import { Switch, Route, Link } from "react-router-dom";
 
 import "./App.css";
 import { styles } from "./css-common"
-import { AppBar, Toolbar, List, ListItem, ListItemIcon, ListItemText, Divider, Typography, IconButton, Drawer, Menu, MenuItem, withStyles } from '@material-ui/core';
+import { AppBar, Toolbar, List, ListItem, ListItemIcon, Button, ListItemText, Divider, Typography, IconButton, Drawer, Menu, MenuItem, withStyles } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import clsx from 'clsx';
@@ -90,6 +90,8 @@ class App extends Component {
     return (
       <div className={classes.root}>
         <CssBaseline />
+        {currentUser && (
+        <div>
         <AppBar className={classes.appBar} position="fixed"
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
@@ -109,7 +111,7 @@ class App extends Component {
             <Typography variant="h6" className={classes.title} noWrap>
               Dashboard
             </Typography>
-            {currentUser && (
+            {currentUser ? (
             <div>
               <IconButton
                 aria-owns={openMenu ? 'menu-appbar' : null}
@@ -140,8 +142,9 @@ class App extends Component {
                 <MenuItem component={Link} to="/login" onClick={this.logOut}>Logout</MenuItem>
               </Menu>
             </div>
-            )}
-
+          ): (
+            <Button color="inherit" component={Link} to="/login">Login</Button>
+          )}
           </Toolbar>
         </AppBar>
 
@@ -188,12 +191,14 @@ class App extends Component {
             </ListItem>
           </List>
         </Drawer>
+        </div>
+        )}
 
         <main className={classes.content}>
+          <Route exact path="/login" component={Login} />
           <div className={classes.toolbar} />
           <Switch>
             <Route exact path={["/", "/home"]} component={Home} />
-            <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/users" component={UsersList} />
