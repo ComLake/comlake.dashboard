@@ -96,10 +96,10 @@ class App extends Component {
     const { classes } = this.props;
 
     return (
+      <div>
+      {authenticated ? (
       <div className={classes.root}>
         <CssBaseline />
-        {authenticated && (
-        <div>
         <AppBar className={classes.appBar} position="fixed"
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
@@ -199,11 +199,8 @@ class App extends Component {
             </ListItem>
           </List>
         </Drawer>
-        </div>
-        )}
 
         <main className={classes.content}>
-          <Route exact path="/login" component={Login} />
           <div className={classes.toolbar} />
           <Switch>
             <PrivateRoute authenticated={this.state.authenticated}
@@ -221,6 +218,12 @@ class App extends Component {
           </Switch>
         </main>
       </div>
+    ) : (
+      <div>
+            <Route exact path="/login" component={Login} />
+      </div>
+    )}
+    </div>
     );
   }
 }
