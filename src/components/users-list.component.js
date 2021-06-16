@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import UserDataService from "../services/user.service";
 import { Link } from "react-router-dom";
 import { DataGrid } from '@material-ui/data-grid';
+import SearchIcon from '@material-ui/icons/Search';
 
 import { styles } from "../css-common"
-import { TextField, Button, Grid, ListItem, withStyles } from "@material-ui/core";
+import { TextField, Button, Grid, ListItem, InputBase, withStyles } from "@material-ui/core";
 
 class UsersList extends Component {
   constructor(props) {
@@ -100,7 +101,7 @@ class UsersList extends Component {
             <Button
               size="small"
               variant="outlined"
-              className={classes.textField}
+              className={classes.searchBtn}
               onClick={this.findByUsername}>
               Search
             </Button>
@@ -125,7 +126,7 @@ class UsersList extends Component {
           <Grid item md={8}>
             {currentUser ? (
               <div className={classes.user}>
-                <h4>User</h4>
+                <h4>User #{currentUser.id}</h4>
                 <div className={classes.detail}>
                   <label>
                     <strong>Username:</strong>

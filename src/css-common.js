@@ -80,4 +80,8 @@ export const styles = theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  searchBtn:{
+    marginLeft: 20,
+    marginTop: 20,
+  }
 });

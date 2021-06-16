@@ -38,6 +38,7 @@ class App extends Component {
     this.handleClose = this.handleClose.bind(this);
 
     this.state = {
+      auth: false,
       showAdmin: false,
       currentUser: undefined,
       open: false,
@@ -53,6 +54,7 @@ class App extends Component {
       this.setState({
         currentUser: user,
         showAdmin: user.roles.includes("ROLE_ADMIN"),
+        auth: true,
       });
     }
   }
@@ -169,6 +171,9 @@ class App extends Component {
               <ListItemText primary="Users" />
             </ListItem>
             )}
+          </List>
+          <Divider />
+          <List>
             <ListItem button key="Groups" component={Link} to="/">
               <ListItemIcon><PeopleIcon /></ListItemIcon>
               <ListItemText primary="Groups" />
@@ -177,12 +182,11 @@ class App extends Component {
               <ListItemIcon><FileCopyIcon /></ListItemIcon>
               <ListItemText primary="Files" />
             </ListItem>
-            <ListItem button key="Folders" component={Link} to="/files">
+            <ListItem button key="Folders" component={Link} to="/">
               <ListItemIcon><FolderIcon /></ListItemIcon>
               <ListItemText primary="Folders" />
             </ListItem>
           </List>
-          <Divider />
         </Drawer>
 
         <main className={classes.content}>
