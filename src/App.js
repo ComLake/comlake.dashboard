@@ -65,10 +65,18 @@ class App extends Component {
         authenticated: true,
       });
     }
+
+    const expirationTime = localStorage.getItem('expirationTime');
+    if (Date.now() >= expirationTime) {
+      this.logOut();
+    }
   }
 
   logOut() {
     AuthService.logout();
+    this.setState({
+      authenticated: false
+    });
   }
 
   handleDrawerOpen() {
@@ -90,6 +98,7 @@ class App extends Component {
   handleClose = () => {
     this.setState({ anchorEl: null });
   };
+
   render() {
     const { currentUser, isAdmin, anchorEl, open, authenticated } = this.state;
     const openMenu = Boolean(anchorEl);

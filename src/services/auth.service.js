@@ -10,6 +10,9 @@ class AuthService {
       .then((response) => {
         if (response.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(response.data));
+          const expirationTime = new Date();
+          expirationTime.setDate(expirationTime.getDate() + 1);
+          localStorage.setItem("expirationTime", expirationTime);
         }
 
         return response.data;
@@ -20,7 +23,7 @@ class AuthService {
     return axios
       .get(API_URL + "logout", { headers: authHeader()} )
       .then(
-        localStorage.removeItem("user")
+        localStorage.clear()
       );
   }
 
