@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import UserDataService from "../services/user.service";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import UserDataService from '../services/user.service';
+import { Link } from 'react-router-dom';
 import { DataGrid } from '@material-ui/data-grid';
 import SearchIcon from '@material-ui/icons/Search';
 
-import { styles } from "../css-common"
-import { TextField, Button, Grid, ListItem, InputBase, withStyles } from "@material-ui/core";
+import { styles } from '../css-common'
+import { TextField, Button, Grid, ListItem, InputBase, withStyles } from '@material-ui/core';
 
 class UsersList extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class UsersList extends Component {
       users: [],
       currentUser: null,
       currentIndex: -1,
-      findByUsername: ""
+      findByUsername: ''
     };
   }
 
@@ -81,103 +81,24 @@ class UsersList extends Component {
     const { classes } = this.props
     const { findByUsername, users, currentUser, currentIndex } = this.state;
     const columns = [
-      { field: "id", headerName: "ID", width: 10 },
-      { field: "username", headerName: "Username", width: 170 },
-      { field: "email", headerName: "Email", width: 70 },
-      { field: "firstname", headerName: "First Name", width: 70 },
-      { field: "lastname", headerName: "Last Name", width: 70 },
-      { field: "department", headerName: "Department", width: 70 },
-      { field: "affiliation", headerName: "Affiliation", width: 70 },
+      { field: 'username', headerName: 'Username', width: 150 },
+      { field: 'email', headerName: 'Email', width: 200 },
+      { field: 'firstname', headerName: 'First Name', width: 150 },
+      { field: 'lastname', headerName: 'Last Name', width: 150 },
+      { field: 'department', headerName: 'Department', width: 150 },
+      { field: 'affiliation', headerName: 'Affiliation', width: 150 },
     ];
     return (
-      <div className={classes.form}>
-        <Grid container>
-          <Grid className={classes.search} item sm={12} xs={12} md={12} xl={12} lg={12}>
-            <TextField
-              label="Search by username"
-              value={findByUsername}
-              onChange={this.onChangeSearchUsername}
+      <div style={{ height: 400, width: '100%' }}>
+        <div style={{ display: 'flex', height: '100%' }}>
+          <div style={{ flexGrow: 1 }}>
+            <DataGrid
+            columns={columns}
+            rows={users}
+            pageSize={10}
             />
-            <Button
-              size="small"
-              variant="outlined"
-              className={classes.searchBtn}
-              onClick={this.findByUsername}>
-              Search
-            </Button>
-          </Grid>
-          <Grid item md={4}>
-            <h2>Users List</h2>
-
-            <div className="list-group">
-              {users &&
-                users.map((user, index) => (
-                  <ListItem
-                    selected={index === currentIndex}
-                    onClick={() => this.setActiveUser(user, index)}
-                    divider
-                    button
-                    key={index}>
-                    {user.username}
-                  </ListItem>
-                ))}
-            </div>
-          </Grid>
-          <Grid item md={8}>
-            {currentUser ? (
-              <div className={classes.user}>
-                <h4>User #{currentUser.id}</h4>
-                <div className={classes.detail}>
-                  <label>
-                    <strong>Username:</strong>
-                  </label>{" "}
-                  {currentUser.username}
-                </div>
-                <div className={classes.detail}>
-                  <label>
-                    <strong>Email:</strong>
-                  </label>{" "}
-                  {currentUser.email}
-                </div>
-                <div className={classes.detail}>
-                  <label>
-                    <strong>firstname:</strong>
-                  </label>{" "}
-                  {currentUser.firstname}
-                </div>
-                <div className={classes.detail}>
-                  <label>
-                    <strong>lastname:</strong>
-                  </label>{" "}
-                  {currentUser.lastname}
-                </div>
-                <div className={classes.detail}>
-                  <label>
-                    <strong>department:</strong>
-                  </label>{" "}
-                  {currentUser.department}
-                </div>
-                <div className={classes.detail}>
-                  <label>
-                    <strong>affiliation:</strong>
-                  </label>{" "}
-                  {currentUser.affiliation}
-                </div>
-                <Link
-                  to={"/users/" + currentUser.id}
-                  className={classes.edit}
-                >
-                  Edit
-              </Link>
-              </div>
-            ) : (
-                <div>
-                  <br />
-                  <p className={classes.user}>Please click on a User...</p>
-                </div>
-              )}
-          </Grid>
-        </Grid>
+          </div>
+        </div>
       </div>
     );
   }
