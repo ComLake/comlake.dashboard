@@ -128,40 +128,34 @@ class App extends Component {
             <Typography variant="h6" className={classes.title} noWrap>
               Dashboard
             </Typography>
-            {currentUser ? (
-            <div>
-              <IconButton
-                aria-owns={openMenu ? 'menu-appbar' : null}
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={this.handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                open={openMenu}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                onClose={this.handleClose}
-              >
-                <MenuItem component={Link} to="/profile" onClick={this.handleClose}>Profile</MenuItem>
-                <MenuItem component={Link} to="/login" onClick={this.logOut}>Logout</MenuItem>
-              </Menu>
-            </div>
-          ): (
-            <Button color="inherit" component={Link} to="/login">Login</Button>
-          )}
+            <IconButton
+              aria-owns={openMenu ? 'menu-appbar' : null}
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={this.handleMenu}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              open={openMenu}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              onClose={this.handleClose}
+            >
+              <MenuItem component={Link} to="/profile" onClick={this.handleClose}>Profile</MenuItem>
+              <MenuItem component={Link} to="/login" onClick={this.logOut}>Logout</MenuItem>
+            </Menu>
           </Toolbar>
         </AppBar>
 
