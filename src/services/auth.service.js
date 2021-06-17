@@ -35,7 +35,7 @@ class AuthService {
     });
   }
 
-  getCurrentUser() {
+  getJwtResponse() {
     return JSON.parse(localStorage.getItem('user'));;
   }
 }

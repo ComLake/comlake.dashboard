@@ -56,7 +56,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const user = AuthService.getCurrentUser();
+    const user = AuthService.getJwtResponse();
 
     if (user) {
       this.setState({
