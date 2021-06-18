@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import UserDataService from '../services/user.service';
 import { Link } from 'react-router-dom';
-import { DataGrid, GridToolbarExport, GridToolbarContainer, GridColDef } from '@material-ui/data-grid';
+import { DataGrid, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensitySelector, GridToolbarFilterButton, GridToolbarContainer, GridColDef } from '@material-ui/data-grid';
+import EditIcon from "@material-ui/icons/Edit";
 
 import { styles } from '../css-common'
-import { Button, withStyles } from '@material-ui/core';
+import { Button, IconButton, withStyles } from '@material-ui/core';
+import { blue } from "@material-ui/core/colors";
 
 class UsersList extends Component {
   constructor(props) {
@@ -36,6 +38,9 @@ class UsersList extends Component {
   CustomToolbar() {
     return (
       <GridToolbarContainer>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarDensitySelector />
         <GridToolbarExport />
       </GridToolbarContainer>
     );
@@ -55,16 +60,17 @@ class UsersList extends Component {
       {
         field: '',
         headerName: 'Action',
-        width: 150,
+        width: 100,
         sortable: false,
-        renderCell: () => (
+        renderCell: (params) => (
           <div>
-            <Button color="primary">
-              Edit
-            </Button>
-            <Button color="secondary">
-              Delete
-            </Button>
+            <IconButton
+              color="primary"
+              aria-label="Edit User"
+              component={Link} to={"/users/" + params.row.id}
+            >
+              <EditIcon style={{ color: blue[500] }} />
+            </IconButton>
           </div>
         ),
       }
