@@ -130,6 +130,28 @@ class User extends Component {
                   />
                 <CardContent>
                     <div>
+                      <TextField
+                          className={classes.textField}
+                          label="Username"
+                          name="username"
+                          variant="outlined"
+                          margin="normal"
+                          value={currentUser.username}
+                          disabled
+                      />
+                    </div>
+                    <div>
+                      <TextField
+                          className={classes.textField}
+                          label="Email"
+                          name="email"
+                          variant="outlined"
+                          margin="normal"
+                          value={currentUser.email}
+                          disabled
+                      />
+                    </div>
+                    <div>
                         <TextField
                             className={classes.textField}
                             label="First Name"
