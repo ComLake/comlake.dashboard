@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import UserDataService from "../services/user.service";
 
 import { styles } from "../css-common"
-import { TextField, Button, withStyles } from "@material-ui/core";
+import { Card, Typography, TextField, CardHeader, CardContent,
+  Button, CardActions, withStyles } from "@material-ui/core";
+import SaveIcon from '@material-ui/icons/Save';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 class User extends Component {
     constructor(props) {
@@ -22,8 +25,7 @@ class User extends Component {
                 lastname: "",
                 department: "",
                 affiliation: "",
-            },
-            message: ""
+            }
         };
     }
 
@@ -97,9 +99,7 @@ class User extends Component {
         )
             .then(response => {
                 console.log(response.data);
-                this.setState({
-                    message: "The user was updated successfully!"
-                });
+                this.props.history.push("/users");
             })
             .catch(e => {
                 console.log(e);
@@ -122,73 +122,81 @@ class User extends Component {
         const { classes } = this.props
 
         return (
-            <div>
-                {currentUser ? (
-                    <div className={classes.form}>
-                        <h2>User</h2>
-                        <form>
-                            <div>
-                                <TextField
-                                    className={classes.textField}
-                                    label="First Name"
-                                    name="firstname"
-                                    value={currentUser.firstname}
-                                    onChange={this.onChangeFirstname}
-                                />
-                            </div>
-                            <div>
-                                <TextField
-                                    className={classes.textField}
-                                    label="Last Name"
-                                    name="lastname"
-                                    value={currentUser.lastname}
-                                    onChange={this.onChangeLastname}
-                                />
-                            </div>
-                            <div>
-                                <TextField
-                                    className={classes.textField}
-                                    label="Department"
-                                    name="department"
-                                    value={currentUser.department}
-                                    onChange={this.onChangeDepartment}
-                                />
-                            </div>
-                            <div>
-                                <TextField
-                                    className={classes.textField}
-                                    label="Affiliation"
-                                    name="affiliation"
-                                    value={currentUser.affiliation}
-                                    onChange={this.onChangeAffiliation}
-                                />
-                            </div>
-                        </form>
-                        <div className={classes.buttonWrapper}>
-                            <Button
-                                className={`${classes.delete} ${classes.button}`}
-                                onClick={this.deleteUser}
-                            >
-                                Delete
-                            </Button>
-
-                            <Button
-                                type="submit"
-                                className={`${classes.update} ${classes.button}`}
-                                onClick={this.updateUser}
-                            >
-                                Update
-                            </Button>
-                        </div>
-                        <p>{this.state.message}</p>
+          <div>
+            {currentUser && (
+                <Card>
+                <CardHeader
+                  title={"Edit User #" + currentUser.id}
+                  />
+                <CardContent>
+                    <div>
+                        <TextField
+                            className={classes.textField}
+                            label="First Name"
+                            name="firstname"
+                            variant="outlined"
+                            margin="normal"
+                            value={currentUser.firstname}
+                            onChange={this.onChangeFirstname}
+                        />
                     </div>
-                ) : (
-                        <div>
-                            <br />
-                            <p>Please click on a User...</p>
-                        </div>
-                    )}
-            </div>
+                    <div>
+                        <TextField
+                            className={classes.textField}
+                            label="Last Name"
+                            name="lastname"
+                            variant="outlined"
+                            margin="normal"
+                            value={currentUser.lastname}
+                            onChange={this.onChangeLastname}
+                        />
+                    </div>
+                    <div>
+                        <TextField
+                            className={classes.textField}
+                            label="Department"
+                            name="department"
+                            variant="outlined"
+                            margin="normal"
+                            value={currentUser.department}
+                            onChange={this.onChangeDepartment}
+                        />
+                    </div>
+                    <div>
+                        <TextField
+                            className={classes.textField}
+                            label="Affiliation"
+                            name="affiliation"
+                            variant="outlined"
+                            margin="normal"
+                            value={currentUser.affiliation}
+                            onChange={this.onChangeAffiliation}
+                        />
+                    </div>
+                </CardContent>
+                <CardActions>
+                    <Button
+                     type="submit"
+                     variant="contained"
+                     color="primary"
+                     className={classes.button}
+                     startIcon={<SaveIcon />}
+                     onClick={this.updateUser}
+                   >
+                     Save
+                   </Button>
+                    <Button
+                     color="secondary"
+                     className={classes.button}
+                     startIcon={<DeleteIcon />}
+                     onClick={this.deleteUser}
+                   >
+                     Delete
+                   </Button>
+                </CardActions>
+                </Card>
+            )}
+          </div>
         );
     }
 }

@@ -97,4 +97,7 @@ export const styles = theme => ({
   fixedHeight: {
     height: 240,
   },
+  textField:{
+    width: 256,
+  }
 });
