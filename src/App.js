@@ -21,11 +21,12 @@ import Register from "./components/register.component";
 import Profile from "./components/profile.component";
 
 import AddUser from "./components/users-add.component";
-import User from "./components/users-edit.component";
 import UsersList from "./components/users-list.component";
+import User from "./components/users-edit.component";
 
 import AddGroup from "./components/groups-add.component";
 import GroupsList from "./components/groups-list.component";
+import Group from "./components/groups-edit.component";
 
 import UploadFiles from "./components/upload-files.component";
 
@@ -224,6 +225,8 @@ class App extends Component {
                 exact path='/groups' component={GroupsList} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/add-groups' component={AddGroup} />
+            <PrivateRoute authenticated={this.state.authenticated}
+              path='/groups/:id' component={Group} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path={['/','/add-files']} component={UploadFiles} />
           </Switch>
