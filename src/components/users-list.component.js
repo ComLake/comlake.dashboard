@@ -3,7 +3,7 @@ import UserDataService from '../services/user.service';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensitySelector, GridToolbarFilterButton, GridToolbarContainer, GridColDef } from '@material-ui/data-grid';
 import EditIcon from "@material-ui/icons/Edit";
-
+import AddIcon from '@material-ui/icons/Add';
 import { styles } from '../css-common'
 import { Button, IconButton, withStyles } from '@material-ui/core';
 import { blue } from "@material-ui/core/colors";
@@ -38,6 +38,9 @@ class UsersList extends Component {
   CustomToolbar() {
     return (
       <GridToolbarContainer>
+        <Button color="primary" startIcon={<AddIcon />} component={Link} to={"/add-users"}>
+          Create
+        </Button>
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
@@ -64,13 +67,14 @@ class UsersList extends Component {
         sortable: false,
         renderCell: (params) => (
           <div>
-            <IconButton
+            <Button
               color="primary"
               aria-label="Edit User"
               component={Link} to={"/users/" + params.row.id}
+              startIcon={<EditIcon />}
             >
-              <EditIcon style={{ color: blue[500] }} />
-            </IconButton>
+              EDIT
+            </Button>
           </div>
         ),
       }

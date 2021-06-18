@@ -66,15 +66,14 @@ class Login extends Component {
 
     return (
       <Container component="main" maxWidth="xs">
-        <div className={classes.paper}>
+        <div className={classes.paperLogin}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form}
-           onSubmit={this.handleLogin}>
+          <form className={classes.form} onSubmit={this.handleLogin}>
             <TextField
               variant="outlined"
               margin="normal"
