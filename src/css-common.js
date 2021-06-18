@@ -99,5 +99,6 @@ export const styles = theme => ({
   },
   textField:{
     width: 256,
+    marginRight: theme.spacing(2),
   }
 });

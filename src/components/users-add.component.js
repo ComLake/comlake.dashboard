@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import UserDataService from "../services/user.service";
 
-import { TextField, Button, withStyles } from "@material-ui/core"
+import { FormControl, Card, CardHeader, CardContent, CardActions, TextField, Button, withStyles } from "@material-ui/core"
+import SaveIcon from '@material-ui/icons/Save';
+
 import { styles } from "../css-common"
 
 class AddUser extends Component {
@@ -138,81 +140,103 @@ class AddUser extends Component {
                         </Button>
                     </div>
                 ) : (
-                        <div className={classes.form}>
-                            <div className={classes.textField}>
+                        <Card>
+                        <CardHeader
+                          title="Create User"
+                          />
+                        <CardContent>
+                            <div>
                                 <TextField
                                     label="Username"
                                     name="username"
+                                    className={classes.textField}
+                                    variant="outlined"
+                                    margin="normal"
                                     value={this.state.username}
                                     onChange={this.onChangeUsername}
                                     required
                                 />
                             </div>
 
-                            <div className={classes.textField}>
+                            <div>
                                 <TextField
                                     label="Email"
                                     name="email"
+                                    variant="outlined"
+                                    margin="normal"
+                                    className={classes.textField}
                                     value={this.state.email}
                                     onChange={this.onChangeEmail}
                                     required
                                 />
                             </div>
 
-                            <div className={classes.textField}>
+                            <div>
                                 <TextField
                                     label="Password"
                                     name="password"
+                                    variant="outlined"
+                                    margin="normal"
+                                    className={classes.textField}
                                     value={this.state.password}
                                     onChange={this.onChangePassword}
                                     required
                                 />
                             </div>
 
-                            <div className={classes.textField}>
                               <TextField
-                                label="firstname"
+                                className={classes.textField}
+                                label="First Name"
+                                variant="outlined"
+                                margin="normal"
                                 value={this.state.firstname}
                                 onChange={this.onChangeFirstname}
                                 name="firstname"
                               />
-                            </div>
 
-                            <div className={classes.textField}>
                               <TextField
-                                label="lastname"
+                                className={classes.textField}
+                                label="Last Name"
+                                variant="outlined"
+                                margin="normal"
                                 value={this.state.lastname}
                                 onChange={this.onChangeLastname}
                                 name="lastname"
                               />
-                            </div>
 
-                            <div className={classes.textField}>
+                            <div>
                               <TextField
-                                label="department"
+                                className={classes.textField}
+                                label="Department"
+                                variant="outlined"
+                                margin="normal"
                                 value={this.state.department}
                                 onChange={this.onChangeDepartment}
                                 name="department"
                               />
-                            </div>
 
-                            <div className={classes.textField}>
                               <TextField
-                                label="affiliation"
+                                className={classes.textField}
+                                label="Affiliation"
+                                variant="outlined"
+                                margin="normal"
                                 value={this.state.affiliation}
                                 onChange={this.onChangeAffiliation}
                                 name="affiliation"
                               />
                             </div>
-
-                            <Button
-                                size="small"
-                                color="primary"
-                                variant="contained"
-                                onClick={this.saveUser}>
-                                Submit
-                            </Button>
-                        </div>
+                            </CardContent>
+                            <CardActions>
+                              <Button
+                                  size="small"
+                                  color="primary"
+                                  variant="contained"
+                                  startIcon={<SaveIcon />}
+                                  onClick={this.saveUser}>
+                                  Submit
+                              </Button>
+                            </CardActions>
+                        </Card>
                     )}
             </React.Fragment>
         );
