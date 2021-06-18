@@ -1,169 +1,101 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import {
-  retrieveUsers,
-  findUsersByUsername,
-} from "../actions/users";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import UserDataService from '../services/user.service';
+import { Link } from 'react-router-dom';
+import { DataGrid, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensitySelector, GridToolbarFilterButton, GridToolbarContainer, GridColDef } from '@material-ui/data-grid';
+import EditIcon from "@material-ui/icons/Edit";
+import AddIcon from '@material-ui/icons/Add';
+import { styles } from '../css-common'
+import { Button, IconButton, withStyles } from '@material-ui/core';
+import { blue } from "@material-ui/core/colors";
 
 class UsersList extends Component {
   constructor(props) {
     super(props);
-    this.onChangeSearchUsername = this.onChangeSearchUsername.bind(this);
-    this.refreshData = this.refreshData.bind(this);
-    this.setActiveUser = this.setActiveUser.bind(this);
-    this.findByUsername = this.findByUsername.bind(this);
+    this.retrieveUsers = this.retrieveUsers.bind(this);
 
     this.state = {
-      currentUser: null,
-      currentIndex: -1,
-      searchUsername: "",
+      users: [],
     };
   }
 
   componentDidMount() {
-    this.props.retrieveUsers();
+    this.retrieveUsers();
   }
 
-  onChangeSearchUsername(e) {
-    const searchUsername = e.target.value;
-
-    this.setState({
-      searchUsername: searchUsername,
-    });
+  retrieveUsers() {
+    UserDataService.getAll()
+      .then(response => {
+        this.setState({
+          users: response.data
+        });
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
-  refreshData() {
-    this.setState({
-      currentUser: null,
-      currentIndex: -1,
-    });
+  CustomToolbar() {
+    return (
+      <GridToolbarContainer>
+        <Button color="primary" startIcon={<AddIcon />} component={Link} to={"/add-users"}>
+          Create
+        </Button>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarDensitySelector />
+        <GridToolbarExport />
+      </GridToolbarContainer>
+    );
   }
 
-  setActiveUser(user, index) {
-    this.setState({
-      currentUser: user,
-      currentIndex: index,
-    });
-  }
-
-  findByUsername() {
-    this.refreshData();
-
-    this.props.findUsersByUsername(this.state.searchUsername);
-  }
 
   render() {
-    const { searchUsername, currentUser, currentIndex } = this.state;
-    const { users } = this.props;
-
-    return (
-      <div className="list row">
-        <div className="col-md-8">
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search by Username"
-              value={searchUsername}
-              onChange={this.onChangeSearchUsername}
-            />
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                onClick={this.findByUsername}
-              >
-                Search
-              </button>
-            </div>
+    const { classes } = this.props
+    const { users } = this.state;
+    const columns = [
+      { field: 'username', headerName: 'Username', width: 150 },
+      { field: 'email', headerName: 'Email', width: 200 },
+      { field: 'firstname', headerName: 'First Name', width: 150 },
+      { field: 'lastname', headerName: 'Last Name', width: 150 },
+      { field: 'department', headerName: 'Department', width: 170 },
+      { field: 'affiliation', headerName: 'Affiliation', width: 170 },
+      {
+        field: '',
+        headerName: 'Action',
+        width: 100,
+        sortable: false,
+        renderCell: (params) => (
+          <div>
+            <Button
+              color="primary"
+              aria-label="Edit User"
+              component={Link} to={"/users/" + params.row.id}
+              startIcon={<EditIcon />}
+            >
+              EDIT
+            </Button>
           </div>
-        </div>
-        <div className="col-md-6">
-          <h4>Users List</h4>
-
-          <ul className="list-group">
-            {users &&
-              users.map((user, index) => (
-                <li
-                  className={
-                    "list-group-item " +
-                    (index === currentIndex ? "active" : "")
-                  }
-                  onClick={() => this.setActiveUser(user, index)}
-                  key={index}
-                >
-                  {user.username}
-                </li>
-              ))}
-          </ul>
-        </div>
-        <div className="col-md-6">
-          {currentUser ? (
-            <div>
-              <h4>User</h4>
-              <div>
-                <label>
-                  <strong>Username:</strong>
-                </label>{" "}
-                {currentUser.username}
-              </div>
-              <div>
-                <label>
-                  <strong>Email:</strong>
-                </label>{" "}
-                {currentUser.email}
-              </div>
-              <div>
-                <label>
-                  <strong>First name:</strong>
-                </label>{" "}
-                {currentUser.firstname}
-              </div>
-              <div>
-                <label>
-                  <strong>Last name:</strong>
-                </label>{" "}
-                {currentUser.lastname}
-              </div>
-              <div>
-                <label>
-                  <strong>Department:</strong>
-                </label>{" "}
-                {currentUser.department}
-              </div>
-              <div>
-                <label>
-                  <strong>Affiliation:</strong>
-                </label>{" "}
-                {currentUser.affiliation}
-              </div>
-              <Link
-                to={"/users/" + currentUser.id}
-                className="badge badge-warning"
-              >
-                Edit
-              </Link>
-            </div>
-          ) : (
-            <div>
-              <br />
-              <p>Please click on a User...</p>
-            </div>
-          )}
+        ),
+      }
+    ];
+    return (
+      <div style={{ height: 400, width: '100%' }}>
+        <div style={{ display: 'flex', height: '100%' }}>
+          <div style={{ flexGrow: 1 }}>
+            <DataGrid
+            columns={columns}
+            rows={users}
+            pageSize={10}
+            components={{
+              Toolbar: this.CustomToolbar,
+            }}
+            />
+          </div>
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    users: state.users,
-  };
-};
-
-export default connect(mapStateToProps, {
-  retrieveUsers,
-  findUsersByUsername,
-})(UsersList);
+export default withStyles(styles)(UsersList)

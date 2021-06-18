@@ -1,22 +1,9 @@
 import React, { Component } from "react";
-import { Redirect } from 'react-router-dom';
+import { styles } from "../css-common";
+import { Avatar, Button, Typography, Container, TextField, withStyles } from '@material-ui/core';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
-
-import { connect } from "react-redux";
-import { login } from "../actions/auth";
-
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
-      </div>
-    );
-  }
-};
+import AuthService from "../services/auth.service";
 
 class Login extends Component {
   constructor(props) {
@@ -29,18 +16,19 @@ class Login extends Component {
       username: "",
       password: "",
       loading: false,
+      message: ""
     };
   }
 
   onChangeUsername(e) {
     this.setState({
-      username: e.target.value,
+      username: e.target.value
     });
   }
 
   onChangePassword(e) {
     this.setState({
-      password: e.target.value,
+      password: e.target.value
     });
   }
 
@@ -48,110 +36,83 @@ class Login extends Component {
     e.preventDefault();
 
     this.setState({
-      loading: true,
+      message: "",
+      loading: true
     });
 
-    this.form.validateAll();
-
-    const { dispatch, history } = this.props;
-
-    if (this.checkBtn.context._errors.length === 0) {
-      dispatch(login(this.state.username, this.state.password))
-        .then(() => {
-          history.push("/profile");
+      AuthService.login(this.state.username, this.state.password).then(
+        () => {
+          this.props.history.push("/profile");
           window.location.reload();
-        })
-        .catch(() => {
+        },
+        error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+
           this.setState({
-            loading: false
+            loading: false,
+            message: resMessage
           });
-        });
-    } else {
-      this.setState({
-        loading: false,
-      });
-    }
+        }
+      );
   }
 
   render() {
-    const { isLoggedIn, message } = this.props;
-
-    if (isLoggedIn) {
-      return <Redirect to="/profile" />;
-    }
+    const { classes } = this.props;
 
     return (
-      <div className="col-md-12 primary-bg-color">
-        <div className="card card-container">
-          <Form
-            onSubmit={this.handleLogin}
-            ref={(c) => {
-              this.form = c;
-            }}
-          >
-            <div className="form-group">
-              <label htmlFor="username">Username</label>
-              <Input
-                type="text"
-                className="form-control"
-                name="username"
-                value={this.state.username}
-                onChange={this.onChangeUsername}
-                validations={[required]}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <Input
-                type="password"
-                className="form-control"
-                name="password"
-                value={this.state.password}
-                onChange={this.onChangePassword}
-                validations={[required]}
-              />
-            </div>
-
-            <div className="form-group">
-              <button
-                className="btn btn-primary btn-block"
-                disabled={this.state.loading}
-              >
-                {this.state.loading && (
-                  <span className="spinner-border spinner-border-sm"></span>
-                )}
-                <span>Login</span>
-              </button>
-            </div>
-
-            {message && (
-              <div className="form-group">
-                <div className="alert alert-danger" role="alert">
-                  {message}
-                </div>
-              </div>
-            )}
-            <CheckButton
-              style={{ display: "none" }}
-              ref={(c) => {
-                this.checkBtn = c;
-              }}
+      <Container component="main" maxWidth="xs">
+        <div className={classes.paperLogin}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <form className={classes.form} onSubmit={this.handleLogin}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
+              value={this.state.username}
+              onChange={this.onChangeUsername}
+              autoFocus
             />
-          </Form>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              value={this.state.password}
+              onChange={this.onChangePassword}
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign In
+            </Button>
+          </form>
         </div>
-      </div>
+      </Container>
     );
   }
 }
-
-function mapStateToProps(state) {
-  const { isLoggedIn } = state.auth;
-  const { message } = state.message;
-  return {
-    isLoggedIn,
-    message
-  };
-}
-
-export default connect(mapStateToProps)(Login);
+export default withStyles(styles)(Login);

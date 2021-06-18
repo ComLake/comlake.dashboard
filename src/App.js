@@ -1,121 +1,234 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Router, Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link, Redirect } from "react-router-dom";
 
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { Navbar,Nav,NavDropdown,Form,FormControl,Button } from 'react-bootstrap'
+import { styles } from "./css-common"
+import { AppBar, Toolbar, List, ListItem, ListItemIcon, Button, ListItemText, Divider, Typography, IconButton, Drawer, Menu, MenuItem, withStyles } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import clsx from 'clsx';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import PersonIcon from '@material-ui/icons/Person';
+import PeopleIcon from '@material-ui/icons/People';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import FolderIcon from '@material-ui/icons/Folder';
+
+import AuthService from "./services/auth.service";
 
 import Login from "./components/login.component";
 import Register from "./components/register.component";
-import Home from "./components/home.component";
 import Profile from "./components/profile.component";
+
 import AddUser from "./components/users-add.component";
 import User from "./components/users-edit.component";
 import UsersList from "./components/users-list.component";
 import UploadFiles from "./components/upload-files.component";
 
-import { logout } from "./actions/auth";
-import { clearMessage } from "./actions/message";
-
-import { history } from './helpers/history';
+function PrivateRoute ({component: Component, authenticated, ...rest}) {
+  return (
+    <Route
+      {...rest}
+      render={(props) => authenticated === true
+        ? <Component {...props} />
+        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+    />
+  )
+}
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.logOut = this.logOut.bind(this);
+    this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
+    this.handleDrawerClose = this.handleDrawerClose.bind(this);
+    this.handleMenu = this.handleMenu.bind(this);
+    this.handleClose = this.handleClose.bind(this);
 
     this.state = {
-      showAdminBoard: false,
+      authenticated: false,
+      isAdmin: false,
       currentUser: undefined,
+      open: false,
+      setOpen: false,
+      anchorEl: null,
     };
-
-    history.listen((location) => {
-      props.dispatch(clearMessage()); // clear message when changing location
-    });
   }
 
   componentDidMount() {
-    const user = this.props.user;
+    const user = AuthService.getJwtResponse();
 
     if (user) {
       this.setState({
         currentUser: user,
-        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
+        isAdmin: user.roles.includes("ROLE_ADMIN"),
+        authenticated: true,
       });
+    }
+
+    const expirationTime = localStorage.getItem('expirationTime');
+    if (Date.now() >= expirationTime) {
+      this.logOut();
     }
   }
 
   logOut() {
-    this.props.dispatch(logout());
+    AuthService.logout();
+    this.setState({
+      authenticated: false
+    });
   }
 
+  handleDrawerOpen() {
+    this.setState({
+      open: true
+    });
+  };
+
+  handleDrawerClose() {
+    this.setState({
+      open: false
+    });
+  };
+
+  handleMenu = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
   render() {
-    const { currentUser, showAdminBoard } = this.state;
+    const { currentUser, isAdmin, anchorEl, open, authenticated } = this.state;
+    const openMenu = Boolean(anchorEl);
+    const { classes } = this.props;
 
     return (
-      <Router history={history}>
-        <div>
-          <Navbar collapseOnSelect bg="primary" variant="dark" expand="lg" sticky="top">
-            <Navbar.Brand href="/">Ulake</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">
-                <Nav.Link href="/home">Home</Nav.Link>
-                {showAdminBoard && (
-                  <Nav.Link href="/users">Users</Nav.Link>
-                )}
-                {showAdminBoard && (
-                  <Nav.Link href="/add">Add User</Nav.Link>
-                )}
-                {currentUser && (
-                  <Nav.Link href="/add-files">Add File</Nav.Link>
-                )}
-                <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                    <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                </NavDropdown>
-                </Nav>
-            </Navbar.Collapse>
-            {currentUser ? (
-              <div className="navbar-nav ml-auto">
-                <Nav.Link href="/profile">{currentUser.username}</Nav.Link>
-                <Nav.Link href="/login" onClick={this.logOut}>Logout</Nav.Link>
-              </div>
-            ) : (
-              <div className="navbar-nav ml-auto">
-                <Nav.Link href="/login">Login</Nav.Link>
-                <Nav.Link href="/register">Sign Up</Nav.Link>
-              </div>
-            )}
-          </Navbar>
+      <div>
+      {authenticated ? (
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar className={classes.appBar} position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open,
+        })}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={this.handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, {
+                [classes.hide]: open,
+              })}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" className={classes.title} noWrap>
+              Dashboard
+            </Typography>
+            <IconButton
+              aria-owns={openMenu ? 'menu-appbar' : null}
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={this.handleMenu}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              open={openMenu}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              onClose={this.handleClose}
+            >
+              <MenuItem component={Link} to="/profile" onClick={this.handleClose}>Profile</MenuItem>
+              <MenuItem component={Link} to="/login" onClick={this.logOut}>Logout</MenuItem>
+            </Menu>
+          </Toolbar>
+        </AppBar>
 
-          <div className="container mt-3">
-            <Switch>
-              <Route exact path={["/", "/home"]} component={Home} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/profile" component={Profile} />
-              <Route exact path="/users" component={UsersList} />
-              <Route exact path="/add" component={AddUser} />
-              <Route path="/users/:id" component={User} />
-              <Route exact path="/add-files" component={UploadFiles} />
-            </Switch>
+        <Drawer
+          variant="permanent"
+          className={clsx(classes.drawer, {
+            [classes.drawerOpen]: open,
+            [classes.drawerClose]: !open,
+          })}
+          classes={{
+            paper: clsx({
+              [classes.drawerOpen]: open,
+              [classes.drawerClose]: !open,
+            }),
+          }}
+        >
+          <div className={classes.toolbar}>
+            <IconButton onClick={this.handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
           </div>
-        </div>
-      </Router>
+          <Divider />
+          <List>
+            {isAdmin && (
+            <ListItem button key="Users" component={Link} to="/users">
+              <ListItemIcon><PersonIcon /></ListItemIcon>
+              <ListItemText primary="Users" />
+            </ListItem>
+            )}
+          </List>
+          <Divider />
+          <List>
+            <ListItem button key="Groups" component={Link} to="/">
+              <ListItemIcon><PeopleIcon /></ListItemIcon>
+              <ListItemText primary="Groups" />
+            </ListItem>
+            <ListItem button key="Files" component={Link} to="/add-files">
+              <ListItemIcon><FileCopyIcon /></ListItemIcon>
+              <ListItemText primary="Files" />
+            </ListItem>
+            <ListItem button key="Folders" component={Link} to="/">
+              <ListItemIcon><FolderIcon /></ListItemIcon>
+              <ListItemText primary="Folders" />
+            </ListItem>
+          </List>
+        </Drawer>
+
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          <Switch>
+            <PrivateRoute authenticated={this.state.authenticated}
+              exact path='/register' component={Register} />
+            <PrivateRoute authenticated={this.state.authenticated}
+              exact path='/profile' component={Profile} />
+            <PrivateRoute authenticated={this.state.authenticated}
+              exact path='/users' component={UsersList} />
+            <PrivateRoute authenticated={this.state.authenticated}
+              exact path='/add-users' component={AddUser} />
+            <PrivateRoute authenticated={this.state.authenticated}
+              path='/users/:id' component={User} />
+            <PrivateRoute authenticated={this.state.authenticated}
+              exact path={['/','/add-files']} component={UploadFiles} />
+          </Switch>
+        </main>
+      </div>
+    ) : (
+      <div>
+            <Route exact path="/login" component={Login} />
+      </div>
+    )}
+    </div>
     );
   }
 }
 
-function mapStateToProps(state) {
-  const { user } = state.auth;
-  return {
-    user,
-  };
-}
-
-export default connect(mapStateToProps)(App);
+export default withStyles(styles)(App);
