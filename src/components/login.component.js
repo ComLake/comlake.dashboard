@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { styles } from "../css-common";
-import { Avatar, Button, Typography, Container, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Grid, Box, withStyles } from '@material-ui/core';
+import { Avatar, Button, Typography, Container, TextField, withStyles } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import AuthService from "../services/auth.service";
