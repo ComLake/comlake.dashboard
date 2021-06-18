@@ -23,6 +23,8 @@ import Profile from "./components/profile.component";
 import AddUser from "./components/users-add.component";
 import User from "./components/users-edit.component";
 import UsersList from "./components/users-list.component";
+
+import GroupsList from "./components/groups-list.component";
 import UploadFiles from "./components/upload-files.component";
 
 function PrivateRoute ({component: Component, authenticated, ...rest}) {
@@ -188,7 +190,7 @@ class App extends Component {
           </List>
           <Divider />
           <List>
-            <ListItem button key="Groups" component={Link} to="/">
+            <ListItem button key="Groups" component={Link} to="/groups">
               <ListItemIcon><PeopleIcon /></ListItemIcon>
               <ListItemText primary="Groups" />
             </ListItem>
@@ -216,6 +218,8 @@ class App extends Component {
               exact path='/add-users' component={AddUser} />
             <PrivateRoute authenticated={this.state.authenticated}
               path='/users/:id' component={User} />
+            <PrivateRoute authenticated={this.state.authenticated}
+                exact path='/groups' component={GroupsList} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path={['/','/add-files']} component={UploadFiles} />
           </Switch>
