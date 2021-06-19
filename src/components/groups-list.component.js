@@ -60,11 +60,20 @@ class GroupsList extends Component {
       { field: 'lastModifiedDate', headerName: 'Last Modified Date', width: 170 },
       {
         field: '',
-        headerName: 'Action',
-        width: 100,
+        headerName: 'Actions',
+        width: 170,
         sortable: false,
         renderCell: (params) => (
           <div>
+            <Button
+              color="primary"
+              aria-label="Add Member to Group"
+              component={Link} to={"/groups/" + params.row.id}
+              startIcon={<AddIcon />}
+            >
+              ADD
+            </Button>
+
             <Button
               color="primary"
               aria-label="Edit Group"

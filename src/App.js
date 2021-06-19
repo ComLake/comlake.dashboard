@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Switch, Route, Link, Redirect } from "react-router-dom";
+import PrivateRoute from "./views/PrivateRoute";
 
 import "./App.css";
 import { styles } from "./css-common"
-import { AppBar, Toolbar, List, ListItem, ListItemIcon, Button, ListItemText, Divider, Typography, IconButton, Drawer, Menu, MenuItem, withStyles } from '@material-ui/core';
+import { AppBar, Toolbar, List, ListItem, ListItemIcon, ListItemText, Divider, Typography, IconButton, Drawer, Menu, MenuItem, withStyles } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import clsx from 'clsx';
@@ -30,17 +31,6 @@ import Group from "./components/groups-edit.component";
 
 import UploadFiles from "./components/upload-files.component";
 
-function PrivateRoute ({component: Component, authenticated, ...rest}) {
-  return (
-    <Route
-      {...rest}
-      render={(props) => authenticated === true
-        ? <Component {...props} />
-        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
-    />
-  )
-}
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -53,7 +43,6 @@ class App extends Component {
     this.state = {
       authenticated: false,
       isAdmin: false,
-      currentUser: undefined,
       open: false,
       setOpen: false,
       anchorEl: null,
@@ -65,15 +54,10 @@ class App extends Component {
 
     if (user) {
       this.setState({
-        currentUser: user,
         isAdmin: user.roles.includes("ROLE_ADMIN"),
         authenticated: true,
       });
-    }
-
-    const expirationTime = localStorage.getItem('expirationTime');
-    if (Date.now() >= expirationTime) {
-      this.logOut();
+      this.forceLogOut();
     }
   }
 
@@ -82,6 +66,14 @@ class App extends Component {
     this.setState({
       authenticated: false
     });
+  }
+
+  forceLogOut(){
+    const expirationTime = new Date(localStorage.getItem('expirationTime'));
+    console.log(expirationTime);
+    if (Date.now() >= expirationTime) {
+      this.logOut();
+    }
   }
 
   handleDrawerOpen() {
@@ -105,7 +97,7 @@ class App extends Component {
   };
 
   render() {
-    const { currentUser, isAdmin, anchorEl, open, authenticated } = this.state;
+    const { isAdmin, anchorEl, open, authenticated } = this.state;
     const openMenu = Boolean(anchorEl);
     const { classes } = this.props;
 
@@ -234,7 +226,8 @@ class App extends Component {
       </div>
     ) : (
       <div>
-            <Route exact path="/login" component={Login} />
+          <Redirect to={{pathname: '/login'}} push />
+          <Route exact path="/login" component={Login} />
       </div>
     )}
     </div>
