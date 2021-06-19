@@ -25,7 +25,7 @@ class GroupDataService {
   }
 
   addUser(id, username){
-    return axios.put(API_URL + `${id}/users/` + `${username}`, { headers: authHeader() });
+    return axios.put(API_URL + `${id}/users/` + `${username}`, null, { headers: authHeader() });
   }
 }
 export default new GroupDataService();

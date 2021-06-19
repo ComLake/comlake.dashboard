@@ -100,5 +100,17 @@ export const styles = theme => ({
   textField:{
     width: 256,
     marginRight: theme.spacing(2),
-  }
+  },
+  chip: {
+    margin: theme.spacing(0.5),
+  },
+  chipContainer:{
+    display: 'flex',
+    justifyContent: 'right',
+    flexWrap: 'wrap',
+    listStyle: 'none',
+    padding: theme.spacing(0.5),
+    margin: 0,
+    border: 0
+  },
 });

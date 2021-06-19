@@ -84,7 +84,7 @@ class GroupsList extends Component {
             <Button
               color="primary"
               aria-label="Add Member to Group"
-              component={Link} to={"/groups/" + params.row.id}
+              component={Link} to={"/add-users/" + params.row.id}
               startIcon={<AddIcon />}
             >
               ADD
