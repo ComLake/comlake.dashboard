@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import GroupDataService from "../services/group.service";
 
 import { styles } from "../css-common"
-import { Card, Typography, TextField, CardHeader, CardContent,
+import { Card, TextField, CardHeader, CardContent,
   Button, CardActions, withStyles } from "@material-ui/core";
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';

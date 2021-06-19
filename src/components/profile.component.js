@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import UserDataService from "../services/user.service";
-import clsx from 'clsx';
+// import clsx from 'clsx';
 import { styles } from "../css-common";
-import { Avatar, Button, Typography, Container, Paper, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Grid, Box, withStyles } from '@material-ui/core';
+import { Button, Typography, Container, Paper, TextField, Grid, Box, withStyles } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 
 class Profile extends Component {
@@ -109,7 +109,7 @@ class Profile extends Component {
     }
     const { currentUser } = this.state;
     const { classes } = this.props;
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     return (
       <Container maxWidth="lg" className={classes.container}>
         {(this.state.userReady) ?

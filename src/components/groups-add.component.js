@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import GroupDataService from "../services/group.service";
 
-import { FormControl, Card, CardHeader, CardContent, CardActions, TextField, Button, withStyles } from "@material-ui/core"
+import { Card, CardHeader, CardContent, CardActions, TextField, Button, withStyles } from "@material-ui/core"
 import SaveIcon from '@material-ui/icons/Save';
 
 import { styles } from "../css-common"
