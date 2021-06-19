@@ -52,12 +52,28 @@ class GroupsList extends Component {
   render() {
     const { classes } = this.props
     const { groups } = this.state;
+    const checkKeysUnderObject = (obj, result) => {
+      for (let key in obj) {
+        if (key) {
+          result.push(obj[key].username);
+        }
+      }
+    };
     const columns = [
       { field: 'name', headerName: 'Name', width: 150 },
-      { field: 'createdBy', headerName: 'Created By', width: 200 },
-      { field: 'createdDate', headerName: 'Created Date', width: 150 },
-      { field: 'lastModifiedBy', headerName: 'Last Modified By', width: 150 },
-      { field: 'lastModifiedDate', headerName: 'Last Modified Date', width: 170 },
+      { field: 'users', headerName: 'Users', width: 200,
+        valueGetter: (params) => {
+          let result = [];
+          if (params.row.users) {
+            checkKeysUnderObject(params.row.users, result);
+          } else {
+            result = ["None"];
+          }
+          return result.join(", ");
+        }
+      },
+      { field: 'createdDate', headerName: 'Created Date', width: 200 },
+      { field: 'lastModifiedDate', headerName: 'Last Modified Date', width: 200 },
       {
         field: '',
         headerName: 'Actions',
