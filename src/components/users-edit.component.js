@@ -132,7 +132,6 @@ class User extends Component {
                     <div>
                       <TextField
                           className={classes.textField}
-                          label="Username"
                           name="username"
                           variant="outlined"
                           margin="normal"
@@ -143,7 +142,6 @@ class User extends Component {
                     <div>
                       <TextField
                           className={classes.textField}
-                          label="Email"
                           name="email"
                           variant="outlined"
                           margin="normal"

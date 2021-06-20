@@ -223,13 +223,13 @@ class App extends Component {
             <PrivateRoute authenticated={this.state.authenticated}
               path='/add-users/:id' component={GroupAddUser} />
             <PrivateRoute authenticated={this.state.authenticated}
-              exact path={['/','/add-files']} component={UploadFiles} />
+              exact path='/add-files' component={UploadFiles} />
           </Switch>
         </main>
       </div>
     ) : (
       <div>
-          <Route exact path="/login" component={Login} />
+          <Route exact path={["/","/login"]} component={Login} />
       </div>
     )}
     </div>
