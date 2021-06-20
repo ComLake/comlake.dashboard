@@ -31,7 +31,8 @@ import GroupsLimited from "./components/groups-limited.component";
 import Group from "./components/groups-edit.component";
 import GroupAddUser from "./components/groups-addUser.component";
 
-import UploadFiles from "./components/upload-files.component";
+import UploadFiles from "./components/files-upload.component";
+import FilesList from "./components/files-list.component";
 
 class App extends Component {
   constructor(props) {
@@ -191,7 +192,7 @@ class App extends Component {
           )}
           <Divider />
           <List>
-            <ListItem button key="Files" component={Link} to="/add-files">
+            <ListItem button key="Files" component={Link} to="/files">
               <ListItemIcon><FolderIcon /></ListItemIcon>
               <ListItemText primary="Files" />
             </ListItem>
@@ -225,6 +226,8 @@ class App extends Component {
               path='/groups/:id' component={Group} />
             <PrivateRoute authenticated={this.state.authenticated}
               path='/add-users/:id' component={GroupAddUser} />
+            <PrivateRoute authenticated={this.state.authenticated}
+              exact path='/files' component={FilesList} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/add-files' component={UploadFiles} />
           </Switch>

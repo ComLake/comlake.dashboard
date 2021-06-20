@@ -15,7 +15,7 @@ class FileDataService {
     });
   }
 
-  getFiles() {
+  getAll() {
     return axios.get(API_URL + "/files", { headers: authHeader() });
   }
 
