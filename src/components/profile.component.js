@@ -17,7 +17,6 @@ class Profile extends Component {
 
     this.state = {
       redirect: null,
-      userReady: false,
       currentUser: {
                       firstname: "",
                       lastname: "",
@@ -40,7 +39,7 @@ class Profile extends Component {
       });
 
     if (!currentUser) this.setState({ redirect: "/login" });
-    this.setState({ currentUser: currentUser, userReady: true })
+    this.setState({ currentUser: currentUser })
   }
 
   onChangeFirstname(e) {
@@ -112,7 +111,6 @@ class Profile extends Component {
     // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     return (
       <Container maxWidth="lg" className={classes.container}>
-        {(this.state.userReady) ?
         <div>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -123,7 +121,6 @@ class Profile extends Component {
 
             <TextField
                 fullWidth
-                label="Username"
                 name="username"
                 variant="outlined"
                 margin="normal"
@@ -132,7 +129,6 @@ class Profile extends Component {
             />
             <TextField
                 fullWidth
-                label="Email"
                 name="email"
                 variant="outlined"
                 margin="normal"
@@ -190,8 +186,7 @@ class Profile extends Component {
             </Paper>
           </Grid>
         </Grid>
-      </div>:
-        null}
+      </div>
       </Container>
     );
   }

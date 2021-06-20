@@ -67,7 +67,7 @@ class GroupAddUser extends Component {
             this.state.username
         )
             .then(response => {
-                this.props.history.push("/groups");
+                this.props.history.push("/admin/groups");
             })
             .catch(e => {
                 console.log(e);

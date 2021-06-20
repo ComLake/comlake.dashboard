@@ -58,7 +58,7 @@ class Group extends Component {
         )
             .then(response => {
                 console.log(response.data);
-                this.props.history.push("/groups");
+                this.props.history.push("/admin/groups");
             })
             .catch(e => {
                 console.log(e);
@@ -69,7 +69,7 @@ class Group extends Component {
         GroupDataService.delete(this.state.currentGroup.id)
             .then(response => {
                 console.log(response.data);
-                this.props.history.push('/groups')
+                this.props.history.push('/admin/groups')
             })
             .catch(e => {
                 console.log(e);

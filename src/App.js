@@ -27,6 +27,7 @@ import User from "./components/users-edit.component";
 
 import AddGroup from "./components/groups-add.component";
 import GroupsList from "./components/groups-list.component";
+import GroupsLimited from "./components/groups-limited.component";
 import Group from "./components/groups-edit.component";
 import GroupAddUser from "./components/groups-addUser.component";
 
@@ -176,27 +177,27 @@ class App extends Component {
             </IconButton>
           </div>
           <Divider />
+          {isAdmin && (
           <List>
-            {isAdmin && (
             <ListItem button key="Users" component={Link} to="/users">
               <ListItemIcon><PersonIcon /></ListItemIcon>
               <ListItemText primary="Users" />
             </ListItem>
-            )}
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="Groups" component={Link} to="/groups">
+            <ListItem button key="Groups" component={Link} to="/admin/groups">
               <ListItemIcon><PeopleIcon /></ListItemIcon>
               <ListItemText primary="Groups" />
             </ListItem>
+          </List>
+          )}
+          <Divider />
+          <List>
             <ListItem button key="Files" component={Link} to="/add-files">
-              <ListItemIcon><FileCopyIcon /></ListItemIcon>
+              <ListItemIcon><FolderIcon /></ListItemIcon>
               <ListItemText primary="Files" />
             </ListItem>
-            <ListItem button key="Folders" component={Link} to="/">
-              <ListItemIcon><FolderIcon /></ListItemIcon>
-              <ListItemText primary="Folders" />
+            <ListItem button key="Groups" component={Link} to="/groups">
+              <ListItemIcon><PeopleIcon /></ListItemIcon>
+              <ListItemText primary="Groups" />
             </ListItem>
           </List>
         </Drawer>
@@ -215,7 +216,9 @@ class App extends Component {
             <PrivateRoute authenticated={this.state.authenticated}
               path='/users/:id' component={User} />
             <PrivateRoute authenticated={this.state.authenticated}
-                exact path='/groups' component={GroupsList} />
+                exact path='/admin/groups' component={GroupsList} />
+            <PrivateRoute authenticated={this.state.authenticated}
+                exact path='/groups' component={GroupsLimited} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/add-groups' component={AddGroup} />
             <PrivateRoute authenticated={this.state.authenticated}
