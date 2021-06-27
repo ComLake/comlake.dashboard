@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 
-const API_URL = "/api/";
+const API_URL = "/api/files";
 
 class FileDataService {
   upload(file, source, topics, onUploadProgress) {
@@ -11,26 +11,26 @@ class FileDataService {
     formData.append("source", source);
     formData.append("topics", topics);
 
-    return axios.post(API_URL + "files", formData, {
+    return axios.post(API_URL, formData, {
       headers: authHeader(),
       onUploadProgress,
     });
   }
 
   getAll() {
-    return axios.get(API_URL + "files", { headers: authHeader() });
+    return axios.get(API_URL, { headers: authHeader() });
   }
 
   get(id) {
-    return axios.get(API_URL + `${id}`, { headers: authHeader() });
+    return axios.get(API_URL + `/${id}`, { headers: authHeader() });
   }
 
   update(id, data) {
-    return axios.put(API_URL + `${id}`, data, { headers: authHeader() });
+    return axios.put(API_URL + `/${id}`, data, { headers: authHeader() });
   }
 
   delete(id) {
-    return axios.delete(API_URL + `${id}`, { headers: authHeader() });
+    return axios.delete(API_URL + `/${id}`, { headers: authHeader() });
   }
 }
 
