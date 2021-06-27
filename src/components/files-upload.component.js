@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Box, Typography, Button, ListItem, withStyles } from '@material-ui/core';
 
-import UploadService from "../services/upload-files.service";
+import UploadService from "../services/file.service";
 
 const BorderLinearProgress = withStyles((theme) => ({
   root: {
