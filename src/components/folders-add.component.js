@@ -13,6 +13,7 @@ class AddFolder extends Component {
         this.onChangeSource = this.onChangeSource.bind(this);
         this.onChangeTopics = this.onChangeTopics.bind(this);
         this.onChangeLanguage = this.onChangeLanguage.bind(this);
+        this.addNewItem = this.addNewItem.bind(this);
 
         this.saveFolder = this.saveFolder.bind(this);
         this.newFolder = this.newFolder.bind(this);
@@ -52,7 +53,7 @@ class AddFolder extends Component {
         });
     }
 
-    addNewItem = () => {
+    addNewItem() {
       this.setState((prevState) => ({
         topics: [...prevState.topics, this.inputElement.value],
       }));
@@ -150,6 +151,7 @@ class AddFolder extends Component {
                                   return <li key={subItems + sIndex}> {subItems}</li>;
                                 })}
                               </ol>
+
                             </div>
 
                             <div>
