@@ -9,7 +9,7 @@ class ContentDataService {
   }
 
   findByName(name) {
-    return axios.get(API_URL + "find/" + `${name}`, { headers: authHeader() });
+    return axios.get(API_URL + "find/name/" + `${name}`, { headers: authHeader() });
   }
 
   addFileToFolder(folderId, fileId) {

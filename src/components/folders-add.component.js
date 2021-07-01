@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import FolderDataService from "../services/folder.service";
 
-import { Card, CardHeader, CardContent, CardActions, TextField, Button, withStyles } from "@material-ui/core"
+import { Card, CardHeader, CardContent, CardActions, TextField, Button, Chip, withStyles } from "@material-ui/core"
 import SaveIcon from '@material-ui/icons/Save';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import { Autocomplete } from '@material-ui/lab';
 
 import { styles } from "../css-common"
 
@@ -15,7 +13,7 @@ class AddFolder extends Component {
         this.onChangeName = this.onChangeName.bind(this);
         this.onChangeSource = this.onChangeSource.bind(this);
         this.onChangeLanguage = this.onChangeLanguage.bind(this);
-        this.addNewItem = this.addNewItem.bind(this);
+        this.onChangeTopics = this.onChangeTopics.bind(this);
 
         this.saveFolder = this.saveFolder.bind(this);
         this.newFolder = this.newFolder.bind(this);
@@ -24,12 +22,16 @@ class AddFolder extends Component {
             id: null,
             name: "",
             source: "",
-            topics: [],
+            topics: null,
             language: "",
 
+            sampleTopics: [
+              "Image Classfication", "Cancer", "Wine", "GPU", "pandas", "Classfication", "Education", "Data Visualization", "numpy", "bussiness", "JSON", "CSV", "Image", "CT Scan", "X-ray", "DCOM"
+            ],
             submitted: false
         };
     }
+
 
     onChangeName(e) {
         this.setState({
@@ -49,11 +51,11 @@ class AddFolder extends Component {
         });
     }
 
-    addNewItem() {
-      this.setState((prevState) => ({
-        topics: [...prevState.topics, this.inputElement.value],
-      }));
-    };
+    onChangeTopics(event, value) {
+      this.setState({
+        topics: value
+      });
+    }
 
     saveFolder() {
         var data = {
@@ -84,7 +86,7 @@ class AddFolder extends Component {
         this.setState({
             name: "",
             source: "",
-            topics: [],
+            topics: null,
             language: "",
 
             submitted: false
@@ -93,7 +95,7 @@ class AddFolder extends Component {
 
     render() {
         const { classes } = this.props
-        console.log(this.state.topics);
+        const { sampleTopics } = this.state;
         return (
             <React.Fragment>
                 {this.state.submitted ? (
@@ -104,7 +106,7 @@ class AddFolder extends Component {
                             color="primary"
                             variant="contained"
                             onClick={this.newFolder}>
-                            Add
+                            Add More
                         </Button>
                     </div>
                 ) : (
@@ -149,22 +151,27 @@ class AddFolder extends Component {
                                 />
                             </div>
                             <div>
-                              <TextField
-                                  label="Topics"
-                                  name="topicse"
-                                  variant="outlined"
-                                  margin="normal"
-                                  className={classes.textField}
-                                  onChange={this.onChangeTopics}
-                                  ref={(el) => (this.inputElement = el)}
+                              <Autocomplete
+                                multiple
+                                id="topics-filled"
+                                options={sampleTopics.map((option) => option)}
+                                freeSolo
+                                onChange={this.onChangeTopics}
+                                renderTags={(value, getTagProps) =>
+                                  value.map((option, index) => (
+                                    <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                                  ))
+                                }
+                                renderInput={(params) => (
+                                  <TextField {...params}
+                                    margin="normal"
+                                    variant="outlined"
+                                    label="Topics"
+                                    placeholder="Topics"
+                                    required
+                                  />
+                                )}
                               />
-                              <input type="text" ref={(el) => (this.inputElement = el)} />
-                              <button onClick={this.addNewItem}> Add Item </button>
-                              <ul>
-                                {this.state.topics.map((subItems, sIndex) => {
-                                  return <li key={subItems + sIndex}> {subItems}</li>;
-                                })}
-                              </ul>
                             </div>
                           </CardContent>
                           <CardActions>
