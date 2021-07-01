@@ -42,7 +42,7 @@ class Login extends Component {
 
       AuthService.login(this.state.username, this.state.password).then(
         () => {
-          this.props.history.push("/add-files");
+          this.props.history.push("/content");
         },
         error => {
           const resMessage =

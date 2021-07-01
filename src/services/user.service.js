@@ -13,7 +13,7 @@ class UserDataService {
   }
 
   create(data) {
-    return axios.post(API_URL, data, { headers: authHeader() });
+    return axios.post("/api/auth/signup", data, { headers: authHeader() });
   }
 
   update(id, data) {
