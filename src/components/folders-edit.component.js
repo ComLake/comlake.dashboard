@@ -4,7 +4,7 @@ import FolderDataService from "../services/folder.service";
 import { styles } from "../css-common"
 import { Card, TextField, CardHeader, CardContent,
   Button, CardActions, Chip, withStyles } from "@material-ui/core";
-  import { Autocomplete } from '@material-ui/lab';
+import { Autocomplete } from '@material-ui/lab';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 

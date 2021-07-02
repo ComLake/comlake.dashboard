@@ -37,9 +37,6 @@ class AclsList extends Component {
   CustomToolbar() {
     return (
       <GridToolbarContainer>
-        <Button color="primary" startIcon={<AddIcon />} component={Link} to={"/add-acls"}>
-          Grant Permission
-        </Button>
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
@@ -52,38 +49,13 @@ class AclsList extends Component {
   render() {
     const { classes } = this.props
     const { acls } = this.state;
-    const checkKeysUnderObject = (obj, result) => {
-      for (let key in obj) {
-        if (key) {
-          result.push(obj[key].username);
-        }
-      }
-    };
     const columns = [
       { field: 'id', headerName: 'ID', width: 100},
       { field: 'sourceId', headerName: 'Source Id', width: 150},
       { field: 'targetId', headerName: 'Target Id', width: 150},
       { field: 'perm', headerName: 'Permission', width: 170},
       { field: 'targetType', headerName: 'Target Type', width: 170},
-      { field: 'sourceType', headerName: 'Source Type', width: 170},
-      {
-        field: '',
-        headerName: 'Actions',
-        width: 170,
-        sortable: false,
-        renderCell: (params) => (
-          <div>
-            <Button
-              color="primary"
-              aria-label="Delete Acl"
-              component={Link} to={"/acls/" + params.row.id}
-              startIcon={<DeleteIcon />}
-            >
-              DELETE
-            </Button>
-          </div>
-        ),
-      }
+      { field: 'sourceType', headerName: 'Source Type', width: 170}
     ];
     return (
       <div style={{ height: 400, width: '100%' }}>

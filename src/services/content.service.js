@@ -12,6 +12,14 @@ class ContentDataService {
     return axios.get(API_URL + "find/name/" + `${name}`, { headers: authHeader() });
   }
 
+  findByTopics(topics) {
+    return axios.get(API_URL + "find/topics/" + `${topics}`,
+    { headers: authHeader(),
+      params: { topics: topics }
+     }
+  );
+  }
+
   addFileToFolder(folderId, fileId) {
     return axios.put(API_URL + "/folders/" + `${folderId}` + "/files/" + `${fileId}`, null, { headers: authHeader() });
   }
