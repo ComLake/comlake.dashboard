@@ -8,6 +8,10 @@ class FolderDataService {
     return axios.get(API_URL, { headers: authHeader() });
   }
 
+  listContent(id){
+    return axios.get(API_URL + "/ls" + `/${id}`, { headers: authHeader() });
+  }
+
   get(id) {
     return axios.get(API_URL + `/${id}`, { headers: authHeader() });
   }

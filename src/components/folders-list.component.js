@@ -1,31 +1,34 @@
 import React, { Component } from 'react';
-import FileDataService from '../services/file.service';
+import FolderDataService from '../services/folder.service';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensitySelector, GridToolbarFilterButton, GridToolbarContainer, GridColDef } from '@material-ui/data-grid';
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from '@material-ui/icons/Add';
+import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 import { styles } from '../css-common'
-import { Button, IconButton, withStyles } from '@material-ui/core';
+import { Button, Icon, IconButton, withStyles } from '@material-ui/core';
+import { blue } from "@material-ui/core/colors";
 
-class FilesList extends Component {
+class FoldersList extends Component {
   constructor(props) {
     super(props);
-    this.retrieveFiles = this.retrieveFiles.bind(this);
+    this.getFolder = this.getFolder.bind(this);
 
     this.state = {
-      files: [],
+      id: null,
+      folders: [],
     };
   }
 
   componentDidMount() {
-    this.retrieveFiles();
+    this.getFolder(this.props.match.params.id);
   }
 
-  retrieveFiles() {
-    FileDataService.getAll()
+  getFolder(id) {
+    FolderDataService.listContent(id)
       .then(response => {
         this.setState({
-          files: response.data
+          folders: response.data
         });
         console.log(response.data);
       })
@@ -37,8 +40,8 @@ class FilesList extends Component {
   CustomToolbar() {
     return (
       <GridToolbarContainer>
-        <Button color="primary" startIcon={<AddIcon />} component={Link} to={"/add-files"}>
-          Create
+        <Button color="primary" startIcon={<CreateNewFolderIcon />} component={Link} to={"/add-folders"}>
+          New Folder
         </Button>
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
@@ -51,37 +54,38 @@ class FilesList extends Component {
 
   render() {
     const { classes } = this.props
-    const { files } = this.state;
+    const { folders } = this.state;
+
     const columns = [
-      { field: 'name', headerName: 'Name', width: 150 },
-      { field: 'owner', headerName: 'Owner', width: 150,
-        valueGetter: (params) => {
-          return params.row.owner.username;
-        }
+      {
+        field: 'type',
+        headerName: 'Type',
+        width: 110,
+        renderCell: (params) => (
+          <div>
+            {params.row.type == 'Folder' ? (
+              <Icon className="fas fa-folder" color="primary" />
+            ) : (
+              <Icon className="fas fa-file" color="primary" />
+            )
+            }
+          </div>
+        ),
       },
-      { field: 'createdDate', headerName: 'Created Date', width: 150, hide: true },
-      { field: 'lastModifiedDate', headerName: 'Last Modified Date', width: 150, hide: true },
-      { field: 'lastModifiedBy', headerName: 'Last Modified By', width: 150, hide: true },
+      { field: 'name', headerName: 'Name', width: 150 },
+      { field: 'createdBy', headerName: 'Owner', width: 200},
+      { field: 'lastModifiedDate', headerName: 'Last Modified', type: 'dateTime', width: 200},
       {
         field: '',
-        headerName: 'Actions',
-        width: 170,
+        headerName: 'Action',
+        width: 100,
         sortable: false,
         renderCell: (params) => (
           <div>
             <Button
               color="primary"
-              aria-label="Add File to Folder"
-              component={Link} to={"/add-users/" + params.row.id}
-              startIcon={<AddIcon />}
-            >
-              ADD
-            </Button>
-
-            <Button
-              color="primary"
-              aria-label="Edit File"
-              component={Link} to={"/files/" + params.row.id}
+              aria-label="Edit Folder"
+              component={Link} to={"/folders/" + params.row.id}
               startIcon={<EditIcon />}
             >
               EDIT
@@ -96,7 +100,7 @@ class FilesList extends Component {
           <div style={{ flexGrow: 1 }}>
             <DataGrid
             columns={columns}
-            rows={files}
+            rows={folders}
             pageSize={5}
             components={{
               Toolbar: this.CustomToolbar,
@@ -109,4 +113,4 @@ class FilesList extends Component {
   }
 }
 
-export default withStyles(styles)(FilesList)
+export default withStyles(styles)(FoldersList)

@@ -86,6 +86,7 @@ class ContentList extends Component {
             components={{
               Toolbar: this.CustomToolbar,
             }}
+            onRowSelected={(e) => console.log(e.data)} // log row data
             />
           </div>
         </div>
