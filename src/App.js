@@ -245,7 +245,7 @@ class App extends Component {
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/add-folders' component={AddFolder} />
             <PrivateRoute authenticated={this.state.authenticated}
-              path='/folders/edit/:id' component={Folder} />
+              path='/edit-folders/:id' component={Folder} />
             <PrivateRoute authenticated={this.state.authenticated}
               path='/folders/:id' component={FoldersList} />
             <PrivateRoute authenticated={this.state.authenticated}

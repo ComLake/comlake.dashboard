@@ -5,8 +5,12 @@ import { DataGrid, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensi
 import EditIcon from "@material-ui/icons/Edit";
 import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 import { styles } from '../css-common'
-import { Button, IconButton, Icon, withStyles } from '@material-ui/core';
+import { ButtonGroup, Button, IconButton, Icon, withStyles } from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import SubdirectoryArrowLeftIcon from '@material-ui/icons/SubdirectoryArrowLeft';
+import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
+
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 class ContentList extends Component {
   constructor(props) {
@@ -43,6 +47,10 @@ class ContentList extends Component {
         <Button color="primary" startIcon={<CreateNewFolderIcon />} component={Link} to={"/add-folders"}>
           New Folder
         </Button>
+        <ButtonGroup color="primary" aria-label="Move">
+          <Button startIcon={<SubdirectoryArrowRightIcon />} component={Link}>Move File to Folder</Button>
+          <Button startIcon={<SubdirectoryArrowRightIcon />} component={Link}>Move Subfolder to Folder</Button>
+        </ButtonGroup>
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
@@ -70,9 +78,33 @@ class ContentList extends Component {
           </div>
         ),
       },
-      { field: 'name', headerName: 'Name', width: 500 },
+      { field: 'name', headerName: 'Name', width: 450 },
       { field: 'createdBy', headerName: 'Owner', width: 200},
-      { field: 'lastModifiedDate', headerName: 'Last Modified', type: 'dateTime', width: 200}
+      { field: 'lastModifiedDate', headerName: 'Last Modified', type: 'dateTime', width: 200},
+      {
+        field: '',
+        headerName: 'Actions',
+        width: 170,
+        sortable: false,
+        renderCell: (params) => (
+          <div>
+            <Button
+              color="primary"
+              aria-label="See Details"
+              component={Link} to={"/edit-folders/" + params.row.id}
+              startIcon={<VisibilityIcon />}
+            >
+            </Button>
+            <Button
+              color="primary"
+              aria-label="Move To"
+              component={Link} to={"/groups/" + params.row.id}
+              startIcon={<SubdirectoryArrowLeftIcon />}
+            >
+            </Button>
+          </div>
+        )
+      }
     ];
     return (
       <div style={{ height: 400, width: '100%' }}>
