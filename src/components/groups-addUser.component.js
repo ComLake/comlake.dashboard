@@ -3,7 +3,7 @@ import GroupDataService from "../services/group.service";
 import UserDataService from "../services/user.service";
 
 import { styles } from "../css-common"
-import { Card, Typography, TextField, CardHeader, CardContent,
+import { Card, TextField, CardHeader, CardContent,
   Button, CardActions, Paper, Chip, withStyles } from "@material-ui/core";
   import Autocomplete from '@material-ui/lab/Autocomplete';
 import AddIcon from '@material-ui/icons/Add';

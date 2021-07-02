@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import GroupDataService from '../services/group.service';
-import { Link } from 'react-router-dom';
-import { DataGrid, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensitySelector, GridToolbarFilterButton, GridToolbarContainer, GridColDef } from '@material-ui/data-grid';
-import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from '@material-ui/icons/Add';
+import { DataGrid, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensitySelector, GridToolbarFilterButton, GridToolbarContainer } from '@material-ui/data-grid';
 import { styles } from '../css-common'
-import { Button, IconButton, withStyles } from '@material-ui/core';
+import {  withStyles } from '@material-ui/core';
 
 class GroupsLimited extends Component {
   constructor(props) {

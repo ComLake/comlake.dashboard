@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route, Link, Redirect } from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
 import PrivateRoute from "./views/PrivateRoute";
 
 import "./App.css";
@@ -12,7 +12,6 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import PersonIcon from '@material-ui/icons/Person';
 import PeopleIcon from '@material-ui/icons/People';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
 import FolderIcon from '@material-ui/icons/Folder';
 
 import AuthService from "./services/auth.service";
@@ -32,6 +31,7 @@ import Group from "./components/groups-edit.component";
 import GroupAddUser from "./components/groups-addUser.component";
 
 import AddFolder from "./components/folders-add.component";
+import Folder from "./components/folders-edit.component";
 
 import UploadFiles from "./components/files-upload.component";
 import FilesList from "./components/files-list.component";
@@ -236,6 +236,8 @@ class App extends Component {
               exact path='/add-files' component={UploadFiles} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/add-folders' component={AddFolder} />
+            <PrivateRoute authenticated={this.state.authenticated}
+              path='/folders/:id' component={Folder} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/content' component={ContentList} />
           </Switch>
