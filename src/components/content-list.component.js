@@ -14,7 +14,7 @@ class ContentList extends Component {
     this.retrieveContent = this.retrieveContent.bind(this);
 
     this.state = {
-      contents: [],
+      content: [],
     };
   }
 
@@ -26,9 +26,8 @@ class ContentList extends Component {
     ContentDataService.getFirstNode()
       .then(response => {
         this.setState({
-          contents: response.data
+          content: response.data
         });
-        console.log(response.data);
       })
       .catch(e => {
         console.log(e);
@@ -55,7 +54,7 @@ class ContentList extends Component {
 
   render() {
     const { classes } = this.props
-    const { contents } = this.state;
+    const { content } = this.state;
     const columns = [
       {
         field: 'type',
@@ -80,10 +79,10 @@ class ContentList extends Component {
       <div style={{ height: 400, width: '100%' }}>
         <div style={{ display: 'flex', height: '100%' }}>
           <div style={{ flexGrow: 1 }}>
-            <DataGrid
+          <DataGrid
             columns={columns}
-            rows={contents}
-            pageSize={10}
+            rows={content}
+            pageSize={5}
             components={{
               Toolbar: this.CustomToolbar,
             }}

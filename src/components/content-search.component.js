@@ -72,6 +72,7 @@ class ContentsSearch extends Component {
       { field: 'type', headerName: 'Type', width: 170}
     ];
     return (
+      <div>
       <Autocomplete
         multiple
         id="topics-filled"
@@ -100,13 +101,14 @@ class ContentsSearch extends Component {
             <DataGrid
             columns={columns}
             rows={contents}
-            pageSize={10}
+            pageSize={5}
             components={{
               Toolbar: this.CustomToolbar,
             }}
             />
           </div>
         </div>
+      </div>
       </div>
     );
   }

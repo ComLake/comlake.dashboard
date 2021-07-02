@@ -101,7 +101,7 @@ class FilesList extends Component {
             <DataGrid
             columns={columns}
             rows={files}
-            pageSize={10}
+            pageSize={5}
             components={{
               Toolbar: this.CustomToolbar,
             }}

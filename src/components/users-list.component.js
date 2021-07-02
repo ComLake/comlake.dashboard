@@ -86,7 +86,7 @@ class UsersList extends Component {
             <DataGrid
             columns={columns}
             rows={users}
-            pageSize={10}
+            pageSize={5}
             components={{
               Toolbar: this.CustomToolbar,
             }}

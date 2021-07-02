@@ -64,7 +64,7 @@ class AclsList extends Component {
             <DataGrid
             columns={columns}
             rows={acls}
-            pageSize={10}
+            pageSize={5}
             components={{
               Toolbar: this.CustomToolbar,
             }}
