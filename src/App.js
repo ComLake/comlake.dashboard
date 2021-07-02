@@ -13,6 +13,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import PersonIcon from '@material-ui/icons/Person';
 import PeopleIcon from '@material-ui/icons/People';
 import FolderIcon from '@material-ui/icons/Folder';
+import LockIcon from '@material-ui/icons/Lock';
 
 import AuthService from "./services/auth.service";
 
@@ -37,6 +38,8 @@ import UploadFiles from "./components/files-upload.component";
 import FilesList from "./components/files-list.component";
 
 import ContentList from "./components/content-list.component";
+
+import AclsList from "./components/acls-list.component";
 
 class App extends Component {
   constructor(props) {
@@ -192,6 +195,10 @@ class App extends Component {
               <ListItemIcon><PeopleIcon /></ListItemIcon>
               <ListItemText primary="Groups" />
             </ListItem>
+            <ListItem button key="Security" component={Link} to="/acls">
+              <ListItemIcon><LockIcon /></ListItemIcon>
+              <ListItemText primary="ACLs" />
+            </ListItem>
           </List>
           )}
           <Divider />
@@ -240,6 +247,8 @@ class App extends Component {
               path='/folders/:id' component={Folder} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/content' component={ContentList} />
+            <PrivateRoute authenticated={this.state.authenticated}
+              exact path='/acls' component={AclsList} />
           </Switch>
         </main>
       </div>
