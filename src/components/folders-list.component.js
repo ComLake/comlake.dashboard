@@ -85,7 +85,7 @@ class FoldersList extends Component {
             <Button
               color="primary"
               aria-label="Edit Folder"
-              component={Link} to={"/folders/" + params.row.id}
+              component={Link} to={"/folders/edit/" + params.row.id}
               startIcon={<EditIcon />}
             >
               EDIT

@@ -40,24 +40,24 @@ class Login extends Component {
       loading: true
     });
 
-      AuthService.login(this.state.username, this.state.password).then(
-        () => {
-          this.props.history.push("/content");
-        },
-        error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
+    AuthService.login(this.state.username, this.state.password).then(
+      () => {
+        this.props.history.push("/profile");
+      },
+      error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
 
-          this.setState({
-            loading: false,
-            message: resMessage
-          });
-        }
-      );
+        this.setState({
+          loading: false,
+          message: resMessage
+        });
+      }
+    );
   }
 
   render() {

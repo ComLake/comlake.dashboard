@@ -51,7 +51,6 @@ class ContentList extends Component {
     );
   }
 
-
   render() {
     const { classes } = this.props
     const { content } = this.state;
@@ -86,7 +85,11 @@ class ContentList extends Component {
             components={{
               Toolbar: this.CustomToolbar,
             }}
-            onRowSelected={(e) => console.log(e.data)} // log row data
+            onRowSelected={(params) => (
+                this.props.history.push("/folders/" + params.data.id)
+              )
+            }
+            isRowSelectable={(params) => params.row.type == 'Folder'}
             />
           </div>
         </div>
