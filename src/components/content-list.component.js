@@ -18,7 +18,7 @@ class ContentList extends Component {
     this.retrieveContent = this.retrieveContent.bind(this);
 
     this.state = {
-      content: [],
+      content: []
     };
   }
 
@@ -47,10 +47,9 @@ class ContentList extends Component {
         <Button color="primary" startIcon={<CreateNewFolderIcon />} component={Link} to={"/add-folders"}>
           New Folder
         </Button>
-        <ButtonGroup color="primary" aria-label="Move">
-          <Button startIcon={<SubdirectoryArrowRightIcon />} component={Link}>Move File to Folder</Button>
-          <Button startIcon={<SubdirectoryArrowRightIcon />} component={Link}>Move Subfolder to Folder</Button>
-        </ButtonGroup>
+        <Button color="primary" startIcon={<SubdirectoryArrowRightIcon />} component={Link} to={"/add-folders"}>
+          Move
+        </Button>
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
