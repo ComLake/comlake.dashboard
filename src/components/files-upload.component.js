@@ -1,160 +1,194 @@
 import React, { Component } from "react";
-import LinearProgress from '@material-ui/core/LinearProgress';
-import { Box, Typography, Button, ListItem, withStyles } from '@material-ui/core';
+import FileDataService from "../services/file.service";
 
-import UploadService from "../services/file.service";
+import { Card, CardHeader, CardContent, CardActions, TextField, Button, Chip, withStyles } from "@material-ui/core"
+import SaveIcon from '@material-ui/icons/Save';
+import { Autocomplete } from '@material-ui/lab';
 
-const BorderLinearProgress = withStyles((theme) => ({
-  root: {
-    height: 15,
-    borderRadius: 5,
-  },
-  colorPrimary: {
-    backgroundColor: "#EEEEEE",
-  },
-  bar: {
-    borderRadius: 5,
-    backgroundColor: '#1a90ff',
-  },
-}))(LinearProgress);
+import { styles } from "../css-common"
 
-export default class UploadFiles extends Component {
-  constructor(props) {
-    super(props);
-    this.selectFile = this.selectFile.bind(this);
-    this.upload = this.upload.bind(this);
+class AddFile extends Component {
+    constructor(props) {
+        super(props);
+        this.onChangeName = this.onChangeName.bind(this);
+        this.onChangeSource = this.onChangeSource.bind(this);
+        this.onChangeLanguage = this.onChangeLanguage.bind(this);
+        this.onChangeTopics = this.onChangeTopics.bind(this);
 
-    this.state = {
-      selectedFiles: undefined,
-      currentFile: undefined,
-      progress: 0,
-      message: "",
-      isError: false,
-      fileInfos: [],
-    };
-  }
+        this.saveFile = this.saveFile.bind(this);
+        this.newFile = this.newFile.bind(this);
 
-  componentDidMount() {
-    UploadService.getFiles().then((response) => {
+        this.state = {
+            id: null,
+            name: "",
+            source: "",
+            topics: null,
+            language: "",
+
+            sampleTopics: [
+              "Image Classfication", "Cancer", "Wine", "GPU", "pandas", "Classfication", "Education", "Data Visualization", "numpy", "bussiness", "JSON", "CSV", "Image", "CT Scan", "X-ray", "DCOM"
+            ],
+            submitted: false
+        };
+    }
+
+
+    onChangeName(e) {
+        this.setState({
+            name: e.target.value
+        });
+    }
+
+    onChangeSource(e) {
+        this.setState({
+            source: e.target.value
+        });
+    }
+
+    onChangeLanguage(e) {
+        this.setState({
+            language: e.target.value
+        });
+    }
+
+    onChangeTopics(event, value) {
       this.setState({
-        fileInfos: response.data,
+        topics: value
       });
-    });
-  }
+    }
 
-  selectFile(event) {
-    this.setState({
-      selectedFiles: event.target.files,
-    });
-  }
+    saveFile() {
+        var data = {
+            name: this.state.name,
+            source: this.state.source,
+            topics: this.state.topics,
+            language: this.state.language
+        };
 
-  upload() {
-    let currentFile = this.state.selectedFiles[0];
+        FileDataService.create(data)
+            .then(response => {
+                this.setState({
+                    name: response.data.name,
+                    source: response.data.source,
+                    topics: response.data.topics,
+                    language: response.data.language,
 
-    this.setState({
-      progress: 0,
-      currentFile: currentFile,
-    });
+                    submitted: true
+                });
+                console.log(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }
 
-    UploadService.upload(currentFile, (event) => {
-      this.setState({
-        progress: Math.round((100 * event.loaded) / event.total),
-      });
-    })
-      .then((response) => {
+    newFile() {
         this.setState({
-          message: response.data.message,
-          isError: false
+            name: "",
+            source: "",
+            topics: null,
+            language: "",
+
+            submitted: false
         });
-        return UploadService.getFiles();
-      })
-      .then((files) => {
-        this.setState({
-          fileInfos: files.data,
-        });
-      })
-      .catch(() => {
-        this.setState({
-          progress: 0,
-          message: "Could not upload the file!",
-          currentFile: undefined,
-          isError: true
-        });
-      });
+    }
 
-    this.setState({
-      selectedFiles: undefined,
-    });
-  }
-
-  render() {
-    const {
-      selectedFiles,
-      currentFile,
-      progress,
-      message,
-      fileInfos,
-      isError
-    } = this.state;
-
-    return (
-      <div className="mg20">
-        {currentFile && (
-          <Box className="mb25" display="flex" alignItems="center">
-            <Box width="100%" mr={1}>
-              <BorderLinearProgress variant="determinate" value={progress} />
-            </Box>
-            <Box minWidth={35}>
-              <Typography variant="body2" color="textSecondary">{`${progress}%`}</Typography>
-            </Box>
-          </Box>)
-        }
-
-        <label htmlFor="btn-upload">
-          <input
-            id="btn-upload"
-            name="btn-upload"
-            style={{ display: 'none' }}
-            type="file"
-            onChange={this.selectFile} />
-          <Button
-            className="btn-choose"
-            variant="outlined"
-            component="span" >
-             Choose Files
-          </Button>
-        </label>
-        <div className="file-name">
-        {selectedFiles && selectedFiles.length > 0 ? selectedFiles[0].name : null}
-        </div>
-        <Button
-          className="btn-upload"
-          color="primary"
-          variant="contained"
-          component="span"
-          disabled={!selectedFiles}
-          onClick={this.upload}>
-          Upload
-        </Button>
-
-        <Typography variant="subtitle2" className={`upload-message ${isError ? "error" : ""}`}>
-          {message}
-        </Typography>
-
-        <Typography variant="h6" className="list-header">
-          List of Files
-          </Typography>
-        <ul className="list-group">
-          {fileInfos &&
-            fileInfos.map((file, index) => (
-              <ListItem
-                divider
-                key={index}>
-                <a href={file.url}>{file.name}</a>
-              </ListItem>
-            ))}
-        </ul>
-      </div >
-    );
-  }
+    render() {
+        const { classes } = this.props
+        const { sampleTopics } = this.state;
+        return (
+            <React.Fragment>
+                {this.state.submitted ? (
+                    <div className={classes.form}>
+                        <h4>You created successfully!</h4>
+                        <Button
+                            size="small"
+                            color="primary"
+                            variant="contained"
+                            onClick={this.newFile}>
+                            Add More
+                        </Button>
+                    </div>
+                ) : (
+                        <Card>
+                        <CardHeader
+                          title="Create File"
+                          />
+                        <CardContent>
+                            <div>
+                                <TextField
+                                    label="Name"
+                                    name="name"
+                                    variant="outlined"
+                                    margin="normal"
+                                    className={classes.textField}
+                                    value={this.state.name}
+                                    onChange={this.onChangeName}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <TextField
+                                    label="Source"
+                                    name="source"
+                                    variant="outlined"
+                                    margin="normal"
+                                    className={classes.textField}
+                                    value={this.state.source}
+                                    onChange={this.onChangeSource}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <TextField
+                                    label="Language"
+                                    name="language"
+                                    variant="outlined"
+                                    margin="normal"
+                                    className={classes.textField}
+                                    value={this.state.language}
+                                    onChange={this.onChangeLanguage}
+                                />
+                            </div>
+                            <div>
+                              <Autocomplete
+                                multiple
+                                id="topics-filled"
+                                options={sampleTopics.map((option) => option)}
+                                freeSolo
+                                onChange={this.onChangeTopics}
+                                renderTags={(value, getTagProps) =>
+                                  value.map((option, index) => (
+                                    <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                                  ))
+                                }
+                                renderInput={(params) => (
+                                  <TextField {...params}
+                                    margin="normal"
+                                    variant="outlined"
+                                    label="Topics"
+                                    placeholder="Topics"
+                                    required
+                                  />
+                                )}
+                              />
+                            </div>
+                          </CardContent>
+                          <CardActions>
+                              <Button
+                                  size="small"
+                                  color="primary"
+                                  variant="contained"
+                                  startIcon={<SaveIcon />}
+                                  onClick={this.saveFile}>
+                                  Submit
+                              </Button>
+                            </CardActions>
+                        </Card>
+                    )}
+            </React.Fragment>
+        );
+    }
 }
+
+export default withStyles(styles)(AddFile)

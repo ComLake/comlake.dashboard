@@ -6,19 +6,24 @@ import EditIcon from "@material-ui/icons/Edit";
 import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 import { styles } from '../css-common'
 import { ButtonGroup, Button, IconButton, Icon, withStyles } from '@material-ui/core';
+import { DropzoneDialog } from 'material-ui-dropzone'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SubdirectoryArrowLeftIcon from '@material-ui/icons/SubdirectoryArrowLeft';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
-
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
 class ContentList extends Component {
   constructor(props) {
     super(props);
     this.retrieveContent = this.retrieveContent.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleSave = this.handleSave.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
 
     this.state = {
-      content: []
+      content: [],
+      openDialog: false,
+      files: []
     };
   }
 
@@ -38,12 +43,29 @@ class ContentList extends Component {
       });
   }
 
+
+  handleClose() {
+      this.setState({
+          openDialog: false
+      });
+    }
+
+  handleSave(files) {
+      this.setState({
+          files: files,
+          openDialog: false
+      });
+    }
+
+  handleOpen() {
+    this.setState({
+        openDialog: true,
+    });
+  }
+
   CustomToolbar() {
     return (
       <GridToolbarContainer>
-        <Button color="primary" startIcon={<CloudUploadIcon />} component={Link} to={"/create-folder"}>
-          Upload
-        </Button>
         <Button color="primary" startIcon={<CreateNewFolderIcon />} component={Link} to={"/add-folders"}>
           New Folder
         </Button>
@@ -69,7 +91,7 @@ class ContentList extends Component {
         renderCell: (params) => (
           <div>
             {params.row.type == 'Folder' ? (
-              <Icon className="fas fa-folder" color="primary" />
+              <Icon className="fas fa-folder orange"/>
             ) : (
               <Icon className="fas fa-file" color="primary" />
             )
@@ -79,33 +101,13 @@ class ContentList extends Component {
       },
       { field: 'name', headerName: 'Name', width: 450 },
       { field: 'createdBy', headerName: 'Owner', width: 200},
-      { field: 'lastModifiedDate', headerName: 'Last Modified', type: 'dateTime', width: 200},
-      {
-        field: '',
-        headerName: 'Actions',
-        width: 170,
-        sortable: false,
-        renderCell: (params) => (
-          <div>
-            <Button
-              color="primary"
-              aria-label="See Details"
-              component={Link} to={"/edit-folders/" + params.row.id}
-              startIcon={<VisibilityIcon />}
-            >
-            </Button>
-            <Button
-              color="primary"
-              aria-label="Move To"
-              component={Link} to={"/groups/" + params.row.id}
-              startIcon={<SubdirectoryArrowLeftIcon />}
-            >
-            </Button>
-          </div>
-        )
-      }
+      { field: 'lastModifiedDate', headerName: 'Last Modified', type: 'dateTime', width: 200}
     ];
     return (
+      <div>
+      <Button color="primary" startIcon={<CloudUploadIcon />} onClick={this.handleOpen}>
+        Upload
+      </Button>
       <div style={{ height: 400, width: '100%' }}>
         <div style={{ display: 'flex', height: '100%' }}>
           <div style={{ flexGrow: 1 }}>
@@ -124,6 +126,18 @@ class ContentList extends Component {
             />
           </div>
         </div>
+      </div>
+      <DropzoneDialog
+          open={this.state.openDialog}
+          onSave={this.handleSave}
+          showPreviews={true}
+          useChipsForPreview
+          previewGridProps={{container: { spacing: 1, direction: 'row' }}}
+          previewChipProps={{classes: { root: classes.previewChip } }}
+          maxFileSize={1073741824}
+          onClose={this.handleClose}
+          previewText="Selected file(s)"
+      />
       </div>
     );
   }
