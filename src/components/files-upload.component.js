@@ -1,22 +1,22 @@
 import React, { Component } from "react";
 import FileDataService from "../services/file.service";
 
-import { Card, CardHeader, CardContent, CardActions, TextField, Button, Chip, withStyles } from "@material-ui/core"
+import { Grid, Card, CardHeader, CardContent, CardActions, TextField, Button, Chip, withStyles } from "@material-ui/core"
 import SaveIcon from '@material-ui/icons/Save';
 import { Autocomplete } from '@material-ui/lab';
+import { DropzoneArea } from 'material-ui-dropzone';
 
 import { styles } from "../css-common"
 
 class AddFile extends Component {
     constructor(props) {
         super(props);
-        this.onChangeName = this.onChangeName.bind(this);
         this.onChangeSource = this.onChangeSource.bind(this);
         this.onChangeLanguage = this.onChangeLanguage.bind(this);
         this.onChangeTopics = this.onChangeTopics.bind(this);
+        this.onChangeFiles = this.onChangeFiles.bind(this);
 
         this.saveFile = this.saveFile.bind(this);
-        this.newFile = this.newFile.bind(this);
 
         this.state = {
             id: null,
@@ -28,10 +28,17 @@ class AddFile extends Component {
             sampleTopics: [
               "Image Classfication", "Cancer", "Wine", "GPU", "pandas", "Classfication", "Education", "Data Visualization", "numpy", "bussiness", "JSON", "CSV", "Image", "CT Scan", "X-ray", "DCOM"
             ],
+
+            files: [],
             submitted: false
         };
     }
 
+    onChangeFiles(files){
+      this.setState({
+        files: files
+      });
+    }
 
     onChangeName(e) {
         this.setState({
@@ -59,7 +66,6 @@ class AddFile extends Component {
 
     saveFile() {
         var data = {
-            name: this.state.name,
             source: this.state.source,
             topics: this.state.topics,
             language: this.state.language
@@ -68,7 +74,6 @@ class AddFile extends Component {
         FileDataService.create(data)
             .then(response => {
                 this.setState({
-                    name: response.data.name,
                     source: response.data.source,
                     topics: response.data.topics,
                     language: response.data.language,
@@ -82,110 +87,85 @@ class AddFile extends Component {
             });
     }
 
-    newFile() {
-        this.setState({
-            name: "",
-            source: "",
-            topics: null,
-            language: "",
-
-            submitted: false
-        });
-    }
-
     render() {
         const { classes } = this.props
-        const { sampleTopics } = this.state;
+        const { sampleTopics, files } = this.state;
+        console.log(files);
         return (
             <React.Fragment>
-                {this.state.submitted ? (
-                    <div className={classes.form}>
-                        <h4>You created successfully!</h4>
-                        <Button
-                            size="small"
-                            color="primary"
-                            variant="contained"
-                            onClick={this.newFile}>
-                            Add More
-                        </Button>
-                    </div>
-                ) : (
-                        <Card>
-                        <CardHeader
-                          title="Create File"
+                <Card>
+                <CardHeader
+                  title="Create File"
+                  />
+                <CardContent>
+                <Grid container spacing={5}>
+                  <Grid item xs={12} sm={6} lg={6}>
+                        <TextField
+                            label="Source"
+                            name="source"
+                            variant="outlined"
+                            margin="normal"
+                            value={this.state.source}
+                            onChange={this.onChangeSource}
+                            required
+                            fullWidth
+                        />
+                        <TextField
+                            label="Language"
+                            name="language"
+                            variant="outlined"
+                            margin="normal"
+                            value={this.state.language}
+                            onChange={this.onChangeLanguage}
+                            fullWidth
+                        />
+                      <Autocomplete
+                        multiple
+                        id="topics-filled"
+                        options={sampleTopics.map((option) => option)}
+                        freeSolo
+                        onChange={this.onChangeTopics}
+                        renderTags={(value, getTagProps) =>
+                          value.map((option, index) => (
+                            <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                          ))
+                        }
+                        renderInput={(params) => (
+                          <TextField {...params}
+                            margin="normal"
+                            variant="outlined"
+                            label="Topics"
+                            placeholder="Topics"
+                            required
                           />
-                        <CardContent>
-                            <div>
-                                <TextField
-                                    label="Name"
-                                    name="name"
-                                    variant="outlined"
-                                    margin="normal"
-                                    className={classes.textField}
-                                    value={this.state.name}
-                                    onChange={this.onChangeName}
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <TextField
-                                    label="Source"
-                                    name="source"
-                                    variant="outlined"
-                                    margin="normal"
-                                    className={classes.textField}
-                                    value={this.state.source}
-                                    onChange={this.onChangeSource}
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <TextField
-                                    label="Language"
-                                    name="language"
-                                    variant="outlined"
-                                    margin="normal"
-                                    className={classes.textField}
-                                    value={this.state.language}
-                                    onChange={this.onChangeLanguage}
-                                />
-                            </div>
-                            <div>
-                              <Autocomplete
-                                multiple
-                                id="topics-filled"
-                                options={sampleTopics.map((option) => option)}
-                                freeSolo
-                                onChange={this.onChangeTopics}
-                                renderTags={(value, getTagProps) =>
-                                  value.map((option, index) => (
-                                    <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-                                  ))
-                                }
-                                renderInput={(params) => (
-                                  <TextField {...params}
-                                    margin="normal"
-                                    variant="outlined"
-                                    label="Topics"
-                                    placeholder="Topics"
-                                    required
-                                  />
-                                )}
-                              />
-                            </div>
-                          </CardContent>
-                          <CardActions>
-                              <Button
-                                  size="small"
-                                  color="primary"
-                                  variant="contained"
-                                  startIcon={<SaveIcon />}
-                                  onClick={this.saveFile}>
-                                  Submit
-                              </Button>
-                            </CardActions>
-                        </Card>
-                    )}
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} lg={6}>
+                      <DropzoneArea
+                        onChange={this.onChangeFiles}
+                        showPreviews={true}
+                        showPreviewsInDropzone={false}
+                        useChipsForPreview
+                        previewGridProps={{container: { spacing: 1, direction: 'row' }}}
+                        previewChipProps={{classes: { root: classes.previewChip } }}
+                        maxFileSize={1073741824}
+                        previewText="Selected file(s)"
+                      />
+                    </Grid>
+                    </Grid>
+                  </CardContent>
+                  <CardActions>
+                      <Button
+                          size="small"
+                          color="primary"
+                          variant="contained"
+                          startIcon={<SaveIcon />}
+                          onClick={this.saveFile}>
+                          Submit
+                      </Button>
+                    </CardActions>
+                </Card>
             </React.Fragment>
         );
     }

@@ -16,14 +16,9 @@ class ContentList extends Component {
   constructor(props) {
     super(props);
     this.retrieveContent = this.retrieveContent.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleSave = this.handleSave.bind(this);
-    this.handleOpen = this.handleOpen.bind(this);
 
     this.state = {
-      content: [],
-      openDialog: false,
-      files: []
+      content: []
     };
   }
 
@@ -43,29 +38,12 @@ class ContentList extends Component {
       });
   }
 
-
-  handleClose() {
-      this.setState({
-          openDialog: false
-      });
-    }
-
-  handleSave(files) {
-      this.setState({
-          files: files,
-          openDialog: false
-      });
-    }
-
-  handleOpen() {
-    this.setState({
-        openDialog: true,
-    });
-  }
-
   CustomToolbar() {
     return (
       <GridToolbarContainer>
+        <Button color="primary" startIcon={<CloudUploadIcon />} component={Link} to={"/add-files"}>
+          Upload
+        </Button>
         <Button color="primary" startIcon={<CreateNewFolderIcon />} component={Link} to={"/add-folders"}>
           New Folder
         </Button>
@@ -105,9 +83,6 @@ class ContentList extends Component {
     ];
     return (
       <div>
-      <Button color="primary" startIcon={<CloudUploadIcon />} onClick={this.handleOpen}>
-        Upload
-      </Button>
       <div style={{ height: 400, width: '100%' }}>
         <div style={{ display: 'flex', height: '100%' }}>
           <div style={{ flexGrow: 1 }}>
@@ -127,17 +102,6 @@ class ContentList extends Component {
           </div>
         </div>
       </div>
-      <DropzoneDialog
-          open={this.state.openDialog}
-          onSave={this.handleSave}
-          showPreviews={true}
-          useChipsForPreview
-          previewGridProps={{container: { spacing: 1, direction: 'row' }}}
-          previewChipProps={{classes: { root: classes.previewChip } }}
-          maxFileSize={1073741824}
-          onClose={this.handleClose}
-          previewText="Selected file(s)"
-      />
       </div>
     );
   }

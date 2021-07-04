@@ -4,7 +4,7 @@ import authHeader from "./auth-header";
 const API_URL = "/api/files";
 
 class FileDataService {
-  upload(file, source, topics, onUploadProgress) {
+  upload(file, source, topics) {
     let formData = new FormData();
 
     formData.append("file", file);
@@ -12,8 +12,7 @@ class FileDataService {
     formData.append("topics", topics);
 
     return axios.post(API_URL, formData, {
-      headers: authHeader(),
-      onUploadProgress,
+      headers: authHeader()
     });
   }
 
