@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import FolderDataService from "../services/folder.service";
+import ContentDataService from "../services/content.service";
 
 import { Card, CardHeader, CardContent, CardActions, TextField, Button, Chip, withStyles } from "@material-ui/core"
 import SaveIcon from '@material-ui/icons/Save';
@@ -14,9 +15,11 @@ class AddFolder extends Component {
         this.onChangeSource = this.onChangeSource.bind(this);
         this.onChangeLanguage = this.onChangeLanguage.bind(this);
         this.onChangeTopics = this.onChangeTopics.bind(this);
+        this.onChangeFolder = this.onChangeFolder.bind(this);
 
         this.saveFolder = this.saveFolder.bind(this);
         this.newFolder = this.newFolder.bind(this);
+        this.retrieveFolders = this.retrieveFolders.bind(this);
 
         this.state = {
             id: null,
@@ -24,7 +27,9 @@ class AddFolder extends Component {
             source: "",
             topics: null,
             language: "",
-
+            folders: [],
+            folderId: "",
+            subfolderId: "",
             sampleTopics: [
               "Image Classfication", "Cancer", "Wine", "GPU", "pandas", "Classfication", "Education", "Data Visualization", "numpy", "bussiness", "JSON", "CSV", "Image", "CT Scan", "X-ray", "DCOM"
             ],
@@ -32,6 +37,21 @@ class AddFolder extends Component {
         };
     }
 
+    componentDidMount() {
+        this.retrieveFolders();
+    }
+
+    retrieveFolders() {
+      FolderDataService.getAll()
+        .then(response => {
+          this.setState({
+            folders: response.data
+          });
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
 
     onChangeName(e) {
         this.setState({
@@ -57,6 +77,14 @@ class AddFolder extends Component {
       });
     }
 
+    onChangeFolder(event, value) {
+      if (value != null){
+        this.setState({
+          folderId: value.id
+        })
+      };
+    }
+
     saveFolder() {
         var data = {
             name: this.state.name,
@@ -64,6 +92,7 @@ class AddFolder extends Component {
             topics: this.state.topics,
             language: this.state.language
         };
+        const folderId = this.state.folderId;
 
         FolderDataService.create(data)
             .then(response => {
@@ -72,10 +101,21 @@ class AddFolder extends Component {
                     source: response.data.source,
                     topics: response.data.topics,
                     language: response.data.language,
+                    subfolderId: response.data.id,
 
                     submitted: true
                 });
                 console.log(response.data);
+                console.log("fileId " + this.state.fileId);
+                if (folderId != null && this.state.subfolderId != null){
+                  ContentDataService.addSubfolderToFolder(folderId, this.state.subfolderId)
+                  .then(response => {
+                    console.log(response.data);
+                  })
+                  .catch(e => {
+                    console.log(e);
+                  });
+                }
             })
             .catch(e => {
                 console.log(e);
@@ -88,6 +128,8 @@ class AddFolder extends Component {
             source: "",
             topics: null,
             language: "",
+            subfolderId: "",
+            folderId: "",
 
             submitted: false
         });
@@ -95,7 +137,7 @@ class AddFolder extends Component {
 
     render() {
         const { classes } = this.props
-        const { sampleTopics } = this.state;
+        const { sampleTopics, folders } = this.state;
         return (
             <React.Fragment>
                 {this.state.submitted ? (
@@ -171,6 +213,14 @@ class AddFolder extends Component {
                                     required
                                   />
                                 )}
+                              />
+                              <Autocomplete
+                                options={folders}
+                                getOptionLabel={(folders) => folders.name}
+                                onChange={this.onChangeFolder}
+                                renderInput={(params) =>
+                                  <TextField {...params} margin="normal" label="Upload To Folder?" variant="outlined"/>
+                                }
                               />
                             </div>
                           </CardContent>

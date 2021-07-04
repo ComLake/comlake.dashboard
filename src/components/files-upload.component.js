@@ -20,7 +20,6 @@ class AddFile extends Component {
         this.onChangeFolder = this.onChangeFolder.bind(this);
         this.uploadFiles = this.uploadFiles.bind(this);
         this.retrieveFolders = this.retrieveFolders.bind(this);
-        this.addFileToFolder = this.addFileToFolder.bind(this);
 
         this.state = {
             id: null,
@@ -96,20 +95,9 @@ class AddFile extends Component {
         });
     }
 
-    addFileToFolder(folderId, fileId){
-      ContentDataService.addFileToFolder(folderId, fileId)
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-    }
-
     uploadFiles() {
         const files = this.state.files;
         const folderId = this.state.folderId;
-        let fileId = this.state.fileId;
 
         files.forEach((file) => {
           console.log(file);
