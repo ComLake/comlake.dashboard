@@ -64,7 +64,7 @@ class FoldersList extends Component {
         renderCell: (params) => (
           <div>
             {params.row.type == 'Folder' ? (
-              <Icon className="fas fa-folder" color="primary" />
+              <Icon className="fas fa-folder orange"/>
             ) : (
               <Icon className="fas fa-file" color="primary" />
             )
@@ -101,7 +101,7 @@ class FoldersList extends Component {
             <DataGrid
             columns={columns}
             rows={folders}
-            pageSize={5}
+            pageSize={10}
             components={{
               Toolbar: this.CustomToolbar,
             }}

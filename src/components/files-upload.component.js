@@ -16,7 +16,7 @@ class AddFile extends Component {
         this.onChangeTopics = this.onChangeTopics.bind(this);
         this.onChangeFiles = this.onChangeFiles.bind(this);
 
-        this.saveFile = this.saveFile.bind(this);
+        this.uploadFiles = this.uploadFiles.bind(this);
 
         this.state = {
             id: null,
@@ -30,6 +30,8 @@ class AddFile extends Component {
             ],
 
             files: [],
+            message:"",
+            isError: false,
             submitted: false
         };
     }
@@ -64,33 +66,33 @@ class AddFile extends Component {
       });
     }
 
-    saveFile() {
-        var data = {
-            source: this.state.source,
-            topics: this.state.topics,
-            language: this.state.language
-        };
-
-        FileDataService.create(data)
-            .then(response => {
+    uploadFiles() {
+        const files = this.state.files;
+        files.forEach((file) => {
+            console.log(file);
+            FileDataService.upload(file, this.state.source, this.state.topics, this.state.language)
+              .then((response) => {
                 this.setState({
-                    source: response.data.source,
-                    topics: response.data.topics,
-                    language: response.data.language,
-
-                    submitted: true
+                  message: response.data.message,
+                  isError: false,
+                  submitted: true
                 });
                 console.log(response.data);
-            })
-            .catch(e => {
-                console.log(e);
-            });
+                this.props.history.push("/content");
+                window.location.reload();
+              })
+              .catch(() => {
+                this.setState({
+                  message: "Could not upload the file!",
+                  isError: true
+                });
+              });
+      });
     }
 
     render() {
         const { classes } = this.props
         const { sampleTopics, files } = this.state;
-        console.log(files);
         return (
             <React.Fragment>
                 <Card>
@@ -161,7 +163,7 @@ class AddFile extends Component {
                           color="primary"
                           variant="contained"
                           startIcon={<SaveIcon />}
-                          onClick={this.saveFile}>
+                          onClick={this.uploadFiles}>
                           Submit
                       </Button>
                     </CardActions>

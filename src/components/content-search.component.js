@@ -101,7 +101,7 @@ class ContentsSearch extends Component {
             <DataGrid
             columns={columns}
             rows={contents}
-            pageSize={5}
+            pageSize={10}
             components={{
               Toolbar: this.CustomToolbar,
             }}

@@ -76,7 +76,7 @@ class GroupsLimited extends Component {
             <DataGrid
             columns={columns}
             rows={groups}
-            pageSize={5}
+            pageSize={10}
             components={{
               Toolbar: this.CustomToolbar,
             }}
