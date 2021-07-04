@@ -17,15 +17,16 @@ class ContentDataService {
     { headers: authHeader(),
       params: { topics: topics }
      }
-  );
+   );
   }
 
   addFileToFolder(folderId, fileId) {
-    return axios.put(API_URL + "/folders/" + `${folderId}` + "/files/" + `${fileId}`, null, { headers: authHeader() });
+    return axios.put(API_URL + "folders/" + `${folderId}` + "/files/" + `${fileId}`, null, { headers: authHeader() });
   }
 
   addSubfolderToFolder(folderId, subfolderId) {
-    return axios.put(API_URL + "/folders/" + `${folderId}` + "/subfolders/" + `${subfolderId}`, null, { headers: authHeader() });
+    return axios.put(API_URL + "folders/" + `${folderId}` + "/subfolders/" + `${subfolderId}`, null, { headers: authHeader() });
   }
 }
+
 export default new ContentDataService();

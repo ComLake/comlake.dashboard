@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import FileDataService from "../services/file.service";
+import FolderDataService from "../services/folder.service";
+import ContentDataService from "../services/content.service";
 
 import { Grid, Card, CardHeader, CardContent, CardActions, TextField, Button, Chip, withStyles } from "@material-ui/core"
 import SaveIcon from '@material-ui/icons/Save';
@@ -15,8 +17,10 @@ class AddFile extends Component {
         this.onChangeLanguage = this.onChangeLanguage.bind(this);
         this.onChangeTopics = this.onChangeTopics.bind(this);
         this.onChangeFiles = this.onChangeFiles.bind(this);
-
+        this.onChangeFolder = this.onChangeFolder.bind(this);
         this.uploadFiles = this.uploadFiles.bind(this);
+        this.retrieveFolders = this.retrieveFolders.bind(this);
+        this.addFileToFolder = this.addFileToFolder.bind(this);
 
         this.state = {
             id: null,
@@ -24,16 +28,21 @@ class AddFile extends Component {
             source: "",
             topics: null,
             language: "",
-
+            folders: [],
+            files: [],
+            folderId: null,
+            fileId: "",
+            message:"",
+            isError: false,
             sampleTopics: [
               "Image Classfication", "Cancer", "Wine", "GPU", "pandas", "Classfication", "Education", "Data Visualization", "numpy", "bussiness", "JSON", "CSV", "Image", "CT Scan", "X-ray", "DCOM"
             ],
-
-            files: [],
-            message:"",
-            isError: false,
             submitted: false
         };
+    }
+
+    componentDidMount() {
+        this.retrieveFolders();
     }
 
     onChangeFiles(files){
@@ -66,33 +75,77 @@ class AddFile extends Component {
       });
     }
 
+
+    onChangeFolder(event, value) {
+      if (value != null){
+        this.setState({
+          folderId: value.id
+        })
+      };
+    }
+
+    retrieveFolders() {
+      FolderDataService.getAll()
+        .then(response => {
+          this.setState({
+            folders: response.data
+          });
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
+
+    addFileToFolder(folderId, fileId){
+      ContentDataService.addFileToFolder(folderId, fileId)
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    }
+
     uploadFiles() {
         const files = this.state.files;
+        const folderId = this.state.folderId;
+        let fileId = this.state.fileId;
+
         files.forEach((file) => {
-            console.log(file);
-            FileDataService.upload(file, this.state.source, this.state.topics, this.state.language)
-              .then((response) => {
-                this.setState({
-                  message: response.data.message,
-                  isError: false,
-                  submitted: true
-                });
-                console.log(response.data);
-                this.props.history.push("/content");
-                window.location.reload();
-              })
-              .catch(() => {
-                this.setState({
-                  message: "Could not upload the file!",
-                  isError: true
-                });
+          console.log(file);
+          FileDataService.upload(file, this.state.source, this.state.topics, this.state.language)
+            .then((response) => {
+              this.setState({
+                fileId: response.data.id,
+                message: response.data.message,
+                isError: false,
+                submitted: true
               });
+              console.log(response.data);
+              console.log("fileId " + this.state.fileId);
+              if (folderId != null && this.state.fileId != null){
+                ContentDataService.addFileToFolder(folderId, this.state.fileId)
+                .then(response => {
+                  console.log(response.data);
+                })
+                .catch(e => {
+                  console.log(e);
+                });
+              }
+              // this.props.history.push("/content");
+            })
+            .catch(() => {
+              this.setState({
+                message: "Could not upload the file!",
+                isError: true
+              });
+          });
       });
     }
 
     render() {
         const { classes } = this.props
-        const { sampleTopics, files } = this.state;
+        const { sampleTopics, files, folders } = this.state;
         return (
             <React.Fragment>
                 <Card>
@@ -102,6 +155,14 @@ class AddFile extends Component {
                 <CardContent>
                 <Grid container spacing={5}>
                   <Grid item xs={12} sm={6} lg={6}>
+                        <Autocomplete
+                          options={folders}
+                          getOptionLabel={(folders) => folders.name}
+                          onChange={this.onChangeFolder}
+                          renderInput={(params) =>
+                            <TextField {...params} margin="normal" label="Upload To Folder?" variant="outlined"/>
+                          }
+                        />
                         <TextField
                             label="Source"
                             name="source"
