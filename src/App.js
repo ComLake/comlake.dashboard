@@ -38,6 +38,7 @@ import FoldersList from "./components/folders-list.component";
 
 import UploadFiles from "./components/files-upload.component";
 import FilesList from "./components/files-list.component";
+import FileEdit from "./components/files-edit.component";
 
 import ContentList from "./components/content-list.component";
 import ContentSearch from "./components/content-search.component";
@@ -248,6 +249,8 @@ class App extends Component {
               exact path='/files' component={FilesList} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/files/upload' component={UploadFiles} />
+            <PrivateRoute authenticated={this.state.authenticated}
+              path='/files/:id/edit' component={FileEdit} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/folders/create' component={AddFolder} />
             <PrivateRoute authenticated={this.state.authenticated}
