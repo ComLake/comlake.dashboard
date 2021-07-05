@@ -96,7 +96,7 @@ class ContentList extends Component {
                 <Button
                   color="primary"
                   aria-label="See Details"
-                  component={Link} to={"/files/edit/" + params.row.id}
+                  component={Link} to={"/files/" + params.row.id}
                   startIcon={<VisibilityIcon />}
                 >
                 </Button>
@@ -106,7 +106,7 @@ class ContentList extends Component {
                 <Button
                   color="primary"
                   aria-label="Edit Folder"
-                  component={Link} to={"/edit-folders/" + params.row.id}
+                  component={Link} to={"/folders/" + params.row.id +  + "/edit"}
                   startIcon={<EditIcon />}
                 >
                 </Button>
@@ -114,7 +114,7 @@ class ContentList extends Component {
                 <Button
                   color="primary"
                   aria-label="Edit File"
-                  component={Link} to={"/edit-files/" + params.row.id}
+                  component={Link} to={"/files/" + params.row.id + "/edit"}
                   startIcon={<EditIcon />}
                 >
                 </Button>

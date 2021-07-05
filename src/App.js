@@ -231,7 +231,7 @@ class App extends Component {
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/users' component={UsersList} />
             <PrivateRoute authenticated={this.state.authenticated}
-              exact path='/add-users' component={AddUser} />
+              exact path='/users/create' component={AddUser} />
             <PrivateRoute authenticated={this.state.authenticated}
               path='/users/:id' component={User} />
             <PrivateRoute authenticated={this.state.authenticated}
@@ -239,19 +239,19 @@ class App extends Component {
             <PrivateRoute authenticated={this.state.authenticated}
                 exact path='/groups' component={GroupsLimited} />
             <PrivateRoute authenticated={this.state.authenticated}
-              exact path='/add-groups' component={AddGroup} />
+              exact path='/groups/create' component={AddGroup} />
             <PrivateRoute authenticated={this.state.authenticated}
               path='/groups/:id' component={Group} />
             <PrivateRoute authenticated={this.state.authenticated}
-              path='/add-users/:id' component={GroupAddUser} />
+              path='/groups/:id/add' component={GroupAddUser} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/files' component={FilesList} />
             <PrivateRoute authenticated={this.state.authenticated}
-              exact path='/add-files' component={UploadFiles} />
+              exact path='/files/upload' component={UploadFiles} />
             <PrivateRoute authenticated={this.state.authenticated}
-              exact path='/add-folders' component={AddFolder} />
+              exact path='/folders/create' component={AddFolder} />
             <PrivateRoute authenticated={this.state.authenticated}
-              path='/edit-folders/:id' component={Folder} />
+              path='/folders/:id/edit' component={Folder} />
             <PrivateRoute authenticated={this.state.authenticated}
               path='/folders/:id' component={FoldersList} />
             <PrivateRoute authenticated={this.state.authenticated}

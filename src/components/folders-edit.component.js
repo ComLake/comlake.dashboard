@@ -3,10 +3,11 @@ import FolderDataService from "../services/folder.service";
 
 import { styles } from "../css-common"
 import { Card, TextField, CardHeader, CardContent,
-  Button, CardActions, Chip, withStyles } from "@material-ui/core";
+  Button, CardActions, Chip, Paper, withStyles } from "@material-ui/core";
 import { Autocomplete } from '@material-ui/lab';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
+import LabelIcon from '@material-ui/icons/Label';
 
 class Folder extends Component {
     constructor(props) {
@@ -173,6 +174,17 @@ class Folder extends Component {
                             onChange={this.onChangeLanguage}
                         />
                     </div>
+                    <Paper variant="outlined" component="ul" className={classes.chipContainer}>
+                      {currentFolder.topics.map((data, index) => (
+                          <li key={index}>
+                            <Chip
+                              icon={<LabelIcon />}
+                              label={data}
+                              className={classes.chip}
+                            />
+                          </li>
+                      ))}
+                    </Paper>
                     <div>
                       <Autocomplete
                         multiple
