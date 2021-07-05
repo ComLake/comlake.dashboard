@@ -12,10 +12,10 @@ class ContentDataService {
     return axios.get(API_URL + "find/name/" + `${name}`, { headers: authHeader() });
   }
 
-  findByTopics(topics) {
-    return axios.get(API_URL + "find/topics/" + `${topics}`,
-    { headers: authHeader(),
-      params: { topics: topics }
+  findByTopics(topic) {
+    return axios.get(API_URL + `find/topics/?topics=${topic}`,
+    {
+      headers: authHeader(),
      }
    );
   }

@@ -14,6 +14,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import PeopleIcon from '@material-ui/icons/People';
 import FolderIcon from '@material-ui/icons/Folder';
 import LockIcon from '@material-ui/icons/Lock';
+import SearchIcon from '@material-ui/icons/Search';
 
 import AuthService from "./services/auth.service";
 
@@ -39,6 +40,7 @@ import UploadFiles from "./components/files-upload.component";
 import FilesList from "./components/files-list.component";
 
 import ContentList from "./components/content-list.component";
+import ContentSearch from "./components/content-search.component";
 
 import AclsList from "./components/acls-list.component";
 
@@ -212,6 +214,10 @@ class App extends Component {
               <ListItemIcon><PeopleIcon /></ListItemIcon>
               <ListItemText primary="Groups" />
             </ListItem>
+            <ListItem button key="Search" component={Link} to="/search">
+              <ListItemIcon><SearchIcon /></ListItemIcon>
+              <ListItemText primary="Search" />
+            </ListItem>
           </List>
         </Drawer>
 
@@ -250,6 +256,8 @@ class App extends Component {
               path='/folders/:id' component={FoldersList} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/content' component={ContentList} />
+            <PrivateRoute authenticated={this.state.authenticated}
+              exact path='/search' component={ContentSearch} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/acls' component={AclsList} />
           </Switch>

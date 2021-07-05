@@ -5,10 +5,10 @@ import { DataGrid, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensi
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import { styles } from '../css-common'
-import { Button, Chip, IconButton, withStyles } from '@material-ui/core';
+import { TextField, Button, Chip, IconButton, withStyles } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 
-class ContentsSearch extends Component {
+class ContentSearch extends Component {
   constructor(props) {
     super(props);
     this.onChangeTopics = this.onChangeTopics.bind(this);
@@ -56,7 +56,7 @@ class ContentsSearch extends Component {
 
   render() {
     const { classes } = this.props
-    const { contents } = this.state;
+    const { contents, sampleTopics } = this.state;
     const checkKeysUnderObject = (obj, result) => {
       for (let key in obj) {
         if (key) {
@@ -67,9 +67,10 @@ class ContentsSearch extends Component {
     const columns = [
       { field: 'id', headerName: 'ID', width: 100},
       { field: 'description', headerName: 'Name', width: 150},
-      { field: 'source', headerName: 'Source', width: 150},
+      { field: 'source', headerName: 'Source', width: 200},
       { field: 'language', headerName: 'Language', width: 170},
-      { field: 'type', headerName: 'Type', width: 170}
+      { field: 'type', headerName: 'Type', width: 200},
+      { field: 'topics', headerName: 'Topics', width: 200}
     ];
     return (
       <div>
@@ -88,8 +89,8 @@ class ContentsSearch extends Component {
           <TextField {...params}
             margin="normal"
             variant="outlined"
-            label="Topics"
-            placeholder="Topics"
+            label="Search Topics"
+            placeholder="Search Topics"
             fullWidth
             required
           />
@@ -114,4 +115,4 @@ class ContentsSearch extends Component {
   }
 }
 
-export default withStyles(styles)(ContentsSearch)
+export default withStyles(styles)(ContentSearch)
