@@ -41,10 +41,10 @@ class ContentList extends Component {
   CustomToolbar() {
     return (
       <GridToolbarContainer>
-        <Button color="primary" startIcon={<CloudUploadIcon />} component={Link} to={"/add-files"}>
+        <Button color="primary" startIcon={<CloudUploadIcon />} component={Link} to={"/files/upload"}>
           Upload
         </Button>
-        <Button color="primary" startIcon={<CreateNewFolderIcon />} component={Link} to={"/add-folders"}>
+        <Button color="primary" startIcon={<CreateNewFolderIcon />} component={Link} to={"/folders/create"}>
           New Folder
         </Button>
         <GridToolbarColumnsButton />
