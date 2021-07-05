@@ -110,7 +110,11 @@ export const styles = theme => ({
     flexWrap: 'wrap',
     listStyle: 'none',
     padding: theme.spacing(0.5),
-    margin: theme.spacing(2),
+    margin: theme.spacing(4),
     border: 0
   },
+  permContainer:{
+    width: '100%',
+    maxHeight: 440,
+  }
 });

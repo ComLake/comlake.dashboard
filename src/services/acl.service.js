@@ -15,5 +15,15 @@ class AclDataService {
   getByFolderId(folderId){
     return axios.get(API_URL + `perm/?folder=${folderId}`, { headers: authHeader() });
   }
+
+  removeFilePermissionForUser(fileId, userId, perm){
+    return axios.delete(API_URL + "file/" + `${fileId}` + "/user/" + `${userId}` + "/perm/" + `${perm}`, { headers: authHeader() });
+  }
+
+  removeFilePermissionForGroup(fileId, groupId, perm){
+    return axios.delete(API_URL + `file/group/?fileId=${fileId}` + `?groupId=${groupId}` + `?permStr=${perm}`);
+  }
+
+
 }
 export default new AclDataService();

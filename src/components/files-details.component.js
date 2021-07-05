@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import FileDataService from "../services/file.service";
 import AclDataService from "../services/acl.service";
+import UserDataService from "../services/user.service";
+import GroupDataService from "../services/group.service";
 
 import { Link } from 'react-router-dom';
 import { styles } from "../css-common"
+import { DataGrid } from '@material-ui/data-grid';
 import { Divider, Card, CardHeader, CardContent, Button, CardActions, Chip, Paper, Typography, withStyles } from "@material-ui/core";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -11,13 +14,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import LabelIcon from '@material-ui/icons/Label';
@@ -30,6 +26,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import UpdateIcon from '@material-ui/icons/Update';
 import EditIcon from "@material-ui/icons/Edit";
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 
 class File extends Component {
     constructor(props) {
@@ -37,10 +34,7 @@ class File extends Component {
 
         this.getFile = this.getFile.bind(this);
         this.getFilePerms = this.getFilePerms.bind(this);
-
-        this.handleChangePage = this.handleChangePage.bind(this);
-        this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
-
+        this.getUsernameById = this.getUsernameById.bind(this);
         this.downloadFile = this.downloadFile.bind(this);
         this.deleteFile = this.deleteFile.bind(this);
 
@@ -55,11 +49,9 @@ class File extends Component {
                 createdDate: null,
                 lastModifiedBy: "",
                 lastModifiedDate: null,
-                topics: []
+                topics: [],
             },
             perms: [],
-            page: 0,
-            rowsPerPage: 10
         };
     }
 
@@ -75,6 +67,21 @@ class File extends Component {
                     currentFile: response.data
                 });
                 console.log(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }
+
+    getUsernameById(userId) {
+        UserDataService.get(userId)
+            .then(response => {
+                console.log(response.data.username);
+                return(
+                  <p>
+                    {response.data.username}
+                  </p>
+                )
             })
             .catch(e => {
                 console.log(e);
@@ -104,20 +111,6 @@ class File extends Component {
           });
     }
 
-    handleChangePage(event, newPage) {
-      this.setState({
-        page: newPage
-      })
-    };
-
-    handleChangeRowsPerPage(event) {
-      this.setState({
-        rowsPerPage: +event.target.value,
-        page: 0
-      })
-    };
-
-
     deleteFile() {
         FileDataService.delete(this.state.currentFile.id)
             .then(response => {
@@ -133,9 +126,54 @@ class File extends Component {
         const { currentFile, rowsPerPage, page, perms } = this.state;
         const { classes } = this.props
         const columns = [
-          { id: 'targetType', label: 'Type', minWidth: 170 },
-          { id: 'targetId', label: 'For', minWidth: 170 },
-          { id: 'perm', label: 'Permission', minWidth: 170 },
+          { field: 'targetType', headerName: 'Type', width: 170 },
+          { field: 'targetId', headerName: 'For', width: 170,
+            renderCell: (params) => (
+              <div>
+                  {params.row.targetType == 'USER' ? (
+                    this.getUsernameById(params.row.targetId)
+                  ) : (
+                    <Button
+                      color="secondary"
+                      aria-label="Remove"
+                      component={Link} to={"/files/" + params.row.id + "/edit"}
+                      startIcon={<RemoveCircleOutlineIcon />}
+                    >
+                    </Button>
+                  )
+                  }
+              </div>
+            )
+          },
+          { field: 'perm', headerName: 'Permission', width: 170 },
+          {
+            field: '',
+            headerName: 'Action',
+            width: 170,
+            sortable: false,
+            renderCell: (params) => (
+              <div>
+                  {params.row.targetType == 'USER' ? (
+                    <Button
+                      color="secondary"
+                      aria-label="Remove"
+                      component={Link} to={"/folders/" + params.row.id +  + "/edit"}
+                      startIcon={<RemoveCircleOutlineIcon />}
+                    >
+                    </Button>
+                  ) : (
+                    <Button
+                      color="secondary"
+                      aria-label="Remove"
+                      component={Link} to={"/files/" + params.row.id + "/edit"}
+                      startIcon={<RemoveCircleOutlineIcon />}
+                    >
+                    </Button>
+                  )
+                  }
+              </div>
+            )
+          }
         ];
 
         return (
@@ -197,51 +235,17 @@ class File extends Component {
                     <Typography variant="h5" component="h5">
                       Permissions on this file
                     </Typography>
-                    <Paper className={classes.permContainer}>
-                      <TableContainer className={classes.container}>
-                        <Table stickyHeader aria-label="sticky table">
-                          <TableHead>
-                            <TableRow>
-                              {columns.map((column) => (
-                                <TableCell
-                                  key={column.id}
-                                  align={column.align}
-                                  style={{ minWidth: column.minWidth }}
-                                >
-                                  {column.label}
-                                </TableCell>
-                              ))}
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {perms.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((perm) => {
-                              return (
-                                <TableRow hover role="checkbox" tabIndex={-1} key={perm.code}>
-                                  {columns.map((column) => {
-                                    const value = perm[column.id];
-                                    return (
-                                      <TableCell key={column.id} align={column.align}>
-                                        {column.format && typeof value === 'number' ? column.format(value) : value}
-                                      </TableCell>
-                                    );
-                                  })}
-                                </TableRow>
-                              );
-                            })}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                      <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
-                        component="div"
-                        count={perms.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onChangePage={this.handleChangePage}
-                        onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                      />
-                  </Paper>
-
+                    <div style={{ height: 300, width: '100%' }}>
+                      <div style={{ display: 'flex', height: '100%' }}>
+                        <div style={{ flexGrow: 1 }}>
+                        <DataGrid
+                          columns={columns}
+                          rows={perms}
+                          pageSize={10}
+                          />
+                        </div>
+                      </div>
+                    </div>
                 </CardContent>
                 <CardActions>
                     <Button
