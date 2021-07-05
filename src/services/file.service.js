@@ -32,6 +32,14 @@ class FileDataService {
   delete(id) {
     return axios.delete(API_URL + `/${id}`, { headers: authHeader() });
   }
+
+  download(id){
+    return axios.get(API_URL + `/data/${id}`,
+      {
+         headers: authHeader(),
+         responseType: 'blob'
+     });
+  }
 }
 
 export default new FileDataService();

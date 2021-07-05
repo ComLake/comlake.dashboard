@@ -110,7 +110,7 @@ export const styles = theme => ({
     flexWrap: 'wrap',
     listStyle: 'none',
     padding: theme.spacing(0.5),
-    margin: 0,
+    margin: theme.spacing(2),
     border: 0
   },
 });

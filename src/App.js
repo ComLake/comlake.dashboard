@@ -39,6 +39,7 @@ import FoldersList from "./components/folders-list.component";
 import UploadFiles from "./components/files-upload.component";
 import FilesList from "./components/files-list.component";
 import FileEdit from "./components/files-edit.component";
+import File from "./components/files-details.component";
 
 import ContentList from "./components/content-list.component";
 import ContentSearch from "./components/content-search.component";
@@ -247,6 +248,8 @@ class App extends Component {
               path='/groups/:id/add' component={GroupAddUser} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/files' component={FilesList} />
+            <PrivateRoute authenticated={this.state.authenticated}
+              path='/files/:id' component={File} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/files/upload' component={UploadFiles} />
             <PrivateRoute authenticated={this.state.authenticated}

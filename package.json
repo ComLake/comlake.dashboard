@@ -13,6 +13,7 @@
     "clsx": "^1.1.1",
     "history": "^4.10.1",
     "http-proxy-middleware": "^0.19.1",
+    "js-file-download": "^0.4.12",
     "material-ui-dropzone": "^3.5.0",
     "node-sass": "^5.0.0",
     "react": "^17.0.2",
