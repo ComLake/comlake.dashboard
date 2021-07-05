@@ -47,9 +47,6 @@ class ContentList extends Component {
         <Button color="primary" startIcon={<CreateNewFolderIcon />} component={Link} to={"/add-folders"}>
           New Folder
         </Button>
-        <Button color="primary" startIcon={<SubdirectoryArrowRightIcon />} component={Link} to={"/add-folders"}>
-          Move
-        </Button>
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
@@ -79,7 +76,53 @@ class ContentList extends Component {
       },
       { field: 'name', headerName: 'Name', width: 450 },
       { field: 'createdBy', headerName: 'Owner', width: 200},
-      { field: 'lastModifiedDate', headerName: 'Last Modified', type: 'dateTime', width: 200}
+      { field: 'lastModifiedDate', headerName: 'Last Modified', type: 'dateTime', width: 200},
+      {
+        field: '',
+        headerName: 'Action',
+        width: 170,
+        sortable: false,
+        renderCell: (params) => (
+          <div>
+              {params.row.type == 'Folder' ? (
+                <Button
+                  color="primary"
+                  aria-label="See Details"
+                  component={Link} to={"/folders/" + params.row.id}
+                  startIcon={<VisibilityIcon />}
+                >
+                </Button>
+              ) : (
+                <Button
+                  color="primary"
+                  aria-label="See Details"
+                  component={Link} to={"/files/edit/" + params.row.id}
+                  startIcon={<VisibilityIcon />}
+                >
+                </Button>
+              )
+              }
+              {params.row.type == 'Folder' ? (
+                <Button
+                  color="primary"
+                  aria-label="Edit Folder"
+                  component={Link} to={"/edit-folders/" + params.row.id}
+                  startIcon={<EditIcon />}
+                >
+                </Button>
+              ) : (
+                <Button
+                  color="primary"
+                  aria-label="Edit File"
+                  component={Link} to={"/edit-files/" + params.row.id}
+                  startIcon={<EditIcon />}
+                >
+                </Button>
+              )
+              }
+          </div>
+        ),
+      }
     ];
     return (
       <div>
@@ -93,11 +136,6 @@ class ContentList extends Component {
             components={{
               Toolbar: this.CustomToolbar,
             }}
-            onRowSelected={(params) => (
-                this.props.history.push("/folders/" + params.data.id)
-              )
-            }
-            isRowSelectable={(params) => params.row.type == 'Folder'}
             />
           </div>
         </div>

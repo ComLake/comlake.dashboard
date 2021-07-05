@@ -26,7 +26,7 @@ class Folder extends Component {
                 name: "",
                 source: "",
                 language: "",
-                topics: null
+                topics: []
             },
             sampleTopics: [
               "Image Classfication", "Cancer", "Wine", "GPU", "pandas", "Classfication", "Education", "Data Visualization", "numpy", "bussiness", "JSON", "CSV", "Image", "CT Scan", "X-ray", "DCOM"
@@ -71,8 +71,8 @@ class Folder extends Component {
       }));
     }
 
-    onChangeTopics(e) {
-      const topics = e.target.value;
+    onChangeTopics(e, value) {
+      const topics = value;
 
       this.setState((prevState) => ({
         currentFolder: {
@@ -96,9 +96,15 @@ class Folder extends Component {
     }
 
     updateFolder() {
+        var data = {
+            name: this.state.currentFolder.name,
+            source: this.state.currentFolder.source,
+            language: this.state.currentFolder.language,
+            topics: this.state.currentFolder.topics,
+        };
         FolderDataService.update(
             this.state.currentFolder.id,
-            this.state.currentFolder
+            data
         )
             .then(response => {
                 console.log(response.data);
@@ -123,6 +129,7 @@ class Folder extends Component {
     render() {
         const { currentFolder, sampleTopics } = this.state;
         const { classes } = this.props
+        console.log(currentFolder);
 
         return (
           <div>
