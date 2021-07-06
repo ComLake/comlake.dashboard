@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import GroupDataService from '../services/group.service';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensitySelector, GridToolbarFilterButton, GridToolbarContainer, GridColDef } from '@material-ui/data-grid';
-import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from '@material-ui/icons/Add';
 import { styles } from '../css-common'
 import { Button, IconButton, withStyles } from '@material-ui/core';
+
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 class GroupsList extends Component {
   constructor(props) {
     super(props);
     this.retrieveGroups = this.retrieveGroups.bind(this);
+    this.deleteGroup = this.deleteGroup.bind(this);
 
     this.state = {
       groups: [],
@@ -48,6 +50,16 @@ class GroupsList extends Component {
     );
   }
 
+  deleteGroup(id) {
+      GroupDataService.delete(id)
+          .then(response => {
+              console.log(response.data);
+              window.location.reload();
+          })
+          .catch(e => {
+              console.log(e);
+          });
+  }
 
   render() {
     const { classes } = this.props
@@ -84,19 +96,19 @@ class GroupsList extends Component {
             <Button
               color="primary"
               aria-label="Add Member to Group"
-              component={Link} to={"/groups/" + params.row.id + "/add"}
+              component={Link} to={"/add/groups/" + params.row.id}
               startIcon={<AddIcon />}
             >
               ADD
             </Button>
 
             <Button
-              color="primary"
-              aria-label="Edit Group"
-              component={Link} to={"/groups/" + params.row.id}
-              startIcon={<EditIcon />}
+              color="secondary"
+              aria-label="Remove Group"
+              onClick={() => this.deleteGroup(params.row.id)}
+              startIcon={<DeleteIcon />}
             >
-              EDIT
+              DELETE
             </Button>
           </div>
         ),

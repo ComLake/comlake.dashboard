@@ -247,7 +247,7 @@ class App extends Component {
             <PrivateRoute authenticated={this.state.authenticated}
               path='/groups/:id' component={Group} />
             <PrivateRoute authenticated={this.state.authenticated}
-              path='/groups/:id/add' component={GroupAddUser} />
+              path='/add/groups/:id' component={GroupAddUser} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/files' component={FilesList} />
             <PrivateRoute authenticated={this.state.authenticated}
@@ -257,11 +257,11 @@ class App extends Component {
             <PrivateRoute authenticated={this.state.authenticated}
               path='/folders/:id' component={Folder} />
             <PrivateRoute authenticated={this.state.authenticated}
-              path='/files/:id/edit' component={FileEdit} />
+              path='/edit/files/:id' component={FileEdit} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/create/folders' component={AddFolder} />
             <PrivateRoute authenticated={this.state.authenticated}
-              path='/folders/:id/edit' component={FolderEdit} />
+              path='/edit/folders/:id' component={FolderEdit} />
             <PrivateRoute authenticated={this.state.authenticated}
               path='/content/folders/:id' component={FoldersList} />
             <PrivateRoute authenticated={this.state.authenticated}

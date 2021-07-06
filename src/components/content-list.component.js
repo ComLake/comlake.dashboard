@@ -99,7 +99,7 @@ class ContentList extends Component {
                   <Button
                     color="primary"
                     aria-label="Edit Folder"
-                    component={Link} to={"/folders/" + params.row.id +  + "/edit"}
+                    component={Link} to={"/edit/folders/" + params.row.id }
                     startIcon={<EditIcon />}
                   >
                   </Button>
@@ -123,7 +123,7 @@ class ContentList extends Component {
                   <Button
                     color="primary"
                     aria-label="Edit File"
-                    component={Link} to={"/files/" + params.row.id + "/edit"}
+                    component={Link} to={"/edit/files/" + params.row.id}
                     startIcon={<EditIcon />}
                   >
                   </Button>
