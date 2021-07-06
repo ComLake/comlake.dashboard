@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { styles } from "../css-common";
-import { Avatar, Button, Typography, Container, TextField, withStyles } from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import AuthService from "../services/auth.service";
+
+import { styles } from "../css-common";
+import { Link, Grid, Avatar, Button, Typography, Container, TextField, withStyles } from '@material-ui/core';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 class Login extends Component {
   constructor(props) {
@@ -66,7 +67,7 @@ class Login extends Component {
 
     return (
       <Container component="main" maxWidth="xs">
-        <div className={classes.paperLogin}>
+        <div className={classes.paperAuth}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
@@ -109,6 +110,13 @@ class Login extends Component {
             >
               Sign In
             </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="/register" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
           </form>
         </div>
       </Container>

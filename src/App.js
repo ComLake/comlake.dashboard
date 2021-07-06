@@ -229,8 +229,6 @@ class App extends Component {
           <div className={classes.toolbar} />
           <Switch>
             <PrivateRoute authenticated={this.state.authenticated}
-              exact path='/register' component={Register} />
-            <PrivateRoute authenticated={this.state.authenticated}
               exact path='/profile' component={Profile} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/users' component={UsersList} />
@@ -278,6 +276,7 @@ class App extends Component {
     ) : (
       <div>
           <Route exact path={["/","/login"]} component={Login} />
+          <Route exact path='/register' component={Register} />
       </div>
     )}
     </div>
