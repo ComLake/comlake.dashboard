@@ -1,65 +1,112 @@
 import React, { Component } from "react";
 import ContentDataService from "../services/content.service";
+import FileDataService from "../services/file.service";
+import FolderDataService from "../services/folder.service";
 
-import { Card, CardHeader, CardContent, CardActions, TextField, Button, Chip, withStyles } from "@material-ui/core"
+import { FormHelperText, Select, FormControl, InputLabel, MenuItem, Card, CardHeader, CardContent, CardActions, TextField, Button, Chip, withStyles } from "@material-ui/core"
 import SaveIcon from '@material-ui/icons/Save';
 import { Autocomplete } from '@material-ui/lab';
 
 import { styles } from "../css-common"
 
-class MoveContent extends Component {
+class ContentMove extends Component {
     constructor(props) {
         super(props);
         this.onChangeFolderId = this.onChangeFolderId.bind(this);
         this.onChangeFileId = this.onChangeFileId.bind(this);
         this.onChangeSubfolderId = this.onChangeSubfolderId.bind(this);
+        this.onChangeType = this.onChangeType.bind(this);
 
-        this.moveFile = this.moveFile.bind(this);
+        this.move = this.move.bind(this);
 
         this.state = {
             id: null,
             folderId: "",
             fileId: "",
             subfolderId: "",
-
-            submitted: false
+            type: "",
+            files: [],
+            folders: []
         };
     }
 
+    componentDidMount() {
+        this.retrieveFiles();
+        this.retrieveFolders();
+    }
 
-    onChangeFolderId(e) {
-        this.setState({
-            folderId: e.target.value
+    retrieveFiles() {
+      FileDataService.getAll()
+        .then(response => {
+          this.setState({
+            files: response.data
+          });
+        })
+        .catch(e => {
+          console.log(e);
         });
     }
 
-    onChangeFileId(e) {
-        this.setState({
-            fileId: e.target.value
+    retrieveFolders() {
+      FolderDataService.getAll()
+        .then(response => {
+          this.setState({
+            folders: response.data
+          });
+        })
+        .catch(e => {
+          console.log(e);
         });
     }
 
-    onChangeSubfolderId(e) {
+    onChangeFolderId(event, value) {
         this.setState({
-            subfolderId: e.target.value
+            folderId: value.id
         });
     }
 
-    moveFile() {
+    onChangeFileId(event, value) {
+        this.setState({
+            fileId: value.id
+        });
+    }
+
+    onChangeSubfolderId(event, value) {
+        this.setState({
+            subfolderId: value.id
+        });
+    }
+
+    move() {
+      if (this.state.type == "FILE") {
         ContentDataService.addFileToFolder(this.state.folderId, this.state.fileId)
             .then(response => {
-                this.setState({
-                    submitted: true
-                });
                 this.props.history.push("/content");
                 console.log(response.data);
             })
             .catch(e => {
                 console.log(e);
             });
+      } else {
+        ContentDataService.addSubfolderToFolder(this.state.folderId, this.state.subfolderId)
+            .then(response => {
+                this.props.history.push("/content");
+                console.log(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+      }
+    }
+
+    onChangeType(e) {
+        this.setState({
+            type: e.target.value
+        });
     }
 
     render() {
+        const { files, folders, type } = this.state;
         const { classes } = this.props
         return (
             <React.Fragment>
@@ -68,41 +115,48 @@ class MoveContent extends Component {
                 title="Move"
                 />
               <CardContent>
-                  <div>
-                      <TextField
-                          label="FolderId"
-                          folderId="folderId"
-                          variant="outlined"
-                          margin="normal"
-                          classFolderId={classes.textField}
-                          value={this.state.folderId}
-                          onChange={this.onChangeFolderId}
-                          required
-                      />
-                  </div>
-                  <div>
-                      <TextField
-                          label="FileId"
-                          folderId="fileId"
-                          variant="outlined"
-                          margin="normal"
-                          classFolderId={classes.textField}
-                          value={this.state.fileId}
-                          onChange={this.onChangeFileId}
-                          required
-                      />
-                  </div>
-                  <div>
-                      <TextField
-                          label="SubfolderId"
-                          folderId="subfolderId"
-                          variant="outlined"
-                          margin="normal"
-                          classFolderId={classes.textField}
-                          value={this.state.subfolderId}
-                          onChange={this.onChangeSubfolderId}
-                      />
-                  </div>
+                  <FormControl variant="outlined" className={classes.formControl}>
+                    <Select
+                      id="select-type"
+                      value={type}
+                      onChange={this.onChangeType}
+                    >
+                      <MenuItem value={"FILE"}>File</MenuItem>
+                      <MenuItem value={"FOLDER"}>Folder</MenuItem>
+                    </Select>
+                    <FormHelperText>Move File or Folder?</FormHelperText>
+                  </FormControl>
+                  {type == 'FILE' ? (
+                    <Autocomplete
+                      options={files}
+                      getOptionLabel={(files) => files.name}
+                      className={classes.formControl}
+                      onChange={this.onChangeFileId}
+                      renderInput={(params) =>
+                        <TextField {...params} margin="normal" label="From File" variant="outlined"/>
+                      }
+                    />
+                  ) : (
+                    <Autocomplete
+                      options={folders}
+                      getOptionLabel={(folders) => folders.name}
+                      className={classes.formControl}
+                      onChange={this.onChangeSubfolderId}
+                      renderInput={(params) =>
+                        <TextField {...params} margin="normal" label="From Folder" variant="outlined"/>
+                      }
+                    />
+                  )
+                  }
+                  <Autocomplete
+                    options={folders}
+                    getOptionLabel={(folders) => folders.name}
+                    className={classes.formControl}
+                    onChange={this.onChangeFolderId}
+                    renderInput={(params) =>
+                      <TextField {...params} margin="normal" label="To Folder" variant="outlined"/>
+                    }
+                  />
                 </CardContent>
                 <CardActions>
                     <Button
@@ -110,7 +164,7 @@ class MoveContent extends Component {
                         color="primary"
                         variant="contained"
                         startIcon={<SaveIcon />}
-                        onClick={this.moveFile}>
+                        onClick={this.move}>
                         Submit
                     </Button>
                   </CardActions>
@@ -120,4 +174,4 @@ class MoveContent extends Component {
     }
 }
 
-export default withStyles(styles)(MoveContent)
+export default withStyles(styles)(ContentMove)

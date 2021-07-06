@@ -44,6 +44,7 @@ import File from "./components/files-details.component";
 
 import ContentList from "./components/content-list.component";
 import ContentSearch from "./components/content-search.component";
+import ContentMove from "./components/content-move.component";
 
 import AclsList from "./components/acls-list.component";
 
@@ -262,9 +263,11 @@ class App extends Component {
             <PrivateRoute authenticated={this.state.authenticated}
               path='/folders/:id/edit' component={FolderEdit} />
             <PrivateRoute authenticated={this.state.authenticated}
-              path='/folders/:id' component={FoldersList} />
+              path='/content/folders/:id' component={FoldersList} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/content' component={ContentList} />
+            <PrivateRoute authenticated={this.state.authenticated}
+              exact path='/move' component={ContentMove} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/search' component={ContentSearch} />
             <PrivateRoute authenticated={this.state.authenticated}

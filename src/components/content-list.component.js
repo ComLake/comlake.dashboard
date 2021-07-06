@@ -47,6 +47,9 @@ class ContentList extends Component {
         <Button color="primary" startIcon={<CreateNewFolderIcon />} component={Link} to={"/create/folders"}>
           New Folder
         </Button>
+        <Button color="primary" startIcon={<SubdirectoryArrowRightIcon />} component={Link} to={"/move"}>
+          Move
+        </Button>
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
@@ -74,7 +77,7 @@ class ContentList extends Component {
           </div>
         ),
       },
-      { field: 'name', headerName: 'Name', width: 450 },
+      { field: 'name', headerName: 'Name', width: 400 },
       { field: 'createdBy', headerName: 'Owner', width: 200},
       { field: 'lastModifiedDate', headerName: 'Last Modified', type: 'dateTime', width: 200},
       {
@@ -85,39 +88,46 @@ class ContentList extends Component {
         renderCell: (params) => (
           <div>
               {params.row.type == 'Folder' ? (
-                <Button
-                  color="primary"
-                  aria-label="See Details"
-                  component={Link} to={"/folders/" + params.row.id}
-                  startIcon={<VisibilityIcon />}
-                >
-                </Button>
+                <div>
+                  <Button
+                    color="primary"
+                    aria-label="See Details"
+                    component={Link} to={"/folders/" + params.row.id}
+                    startIcon={<VisibilityIcon />}
+                  >
+                  </Button>
+                  <Button
+                    color="primary"
+                    aria-label="Edit Folder"
+                    component={Link} to={"/folders/" + params.row.id +  + "/edit"}
+                    startIcon={<EditIcon />}
+                  >
+                  </Button>
+                  <Button
+                    color="primary"
+                    aria-label="See Subdirectory"
+                    component={Link} to={"/content/folders/" + params.row.id}
+                    startIcon={<SubdirectoryArrowLeftIcon />}
+                  >
+                  </Button>
+                </div>
               ) : (
-                <Button
-                  color="primary"
-                  aria-label="See Details"
-                  component={Link} to={"/files/" + params.row.id}
-                  startIcon={<VisibilityIcon />}
-                >
-                </Button>
-              )
-              }
-              {params.row.type == 'Folder' ? (
-                <Button
-                  color="primary"
-                  aria-label="Edit Folder"
-                  component={Link} to={"/folders/" + params.row.id +  + "/edit"}
-                  startIcon={<EditIcon />}
-                >
-                </Button>
-              ) : (
-                <Button
-                  color="primary"
-                  aria-label="Edit File"
-                  component={Link} to={"/files/" + params.row.id + "/edit"}
-                  startIcon={<EditIcon />}
-                >
-                </Button>
+                <div>
+                  <Button
+                    color="primary"
+                    aria-label="See Details"
+                    component={Link} to={"/files/" + params.row.id}
+                    startIcon={<VisibilityIcon />}
+                  >
+                  </Button>
+                  <Button
+                    color="primary"
+                    aria-label="Edit File"
+                    component={Link} to={"/files/" + params.row.id + "/edit"}
+                    startIcon={<EditIcon />}
+                  >
+                  </Button>
+                </div>
               )
               }
           </div>
@@ -126,7 +136,7 @@ class ContentList extends Component {
     ];
     return (
       <div>
-      <div style={{ height: 400, width: '100%' }}>
+      <div style={{ height: 450, width: '100%' }}>
         <div style={{ display: 'flex', height: '100%' }}>
           <div style={{ flexGrow: 1 }}>
           <DataGrid
