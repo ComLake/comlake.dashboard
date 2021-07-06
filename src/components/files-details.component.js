@@ -266,19 +266,45 @@ class File extends Component {
             {currentFile && (
                 <Card>
                 <CardHeader
-                  title={"Details of File #" + currentFile.id}
+                  avatar={
+                    <Avatar aria-label="filename">
+                      <FolderOpenIcon />
+                    </Avatar>
+                  }
+                  title={currentFile.name}
+                  action={
+                    <div>
+                    <Button
+                     color="primary"
+                     type="submit"
+                     className={classes.button}
+                     startIcon={<GetAppIcon />}
+                     onClick={() => this.downloadFile(currentFile.id)}
+                   >
+                     Download
+                   </Button>
+                   <Button
+                     color="primary"
+                     aria-label="Edit File"
+                     className={classes.button}
+                     component={Link} to={"/files/" + currentFile.id + "/edit"}
+                     startIcon={<EditIcon />}
+                   >
+                    Edit
+                   </Button>
+                    <Button
+                     color="secondary"
+                     className={classes.button}
+                     startIcon={<DeleteIcon />}
+                     onClick={this.deleteFile}
+                   >
+                     Delete
+                   </Button>
+                    </div>
+                  }
                   />
                 <CardContent>
                     <List aria-labelledby="Details">
-                      <ListItem>
-                       <ListItemAvatar>
-                        <Avatar>
-                          <FolderOpenIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                       <ListItemText primary="Name" secondary={currentFile.name} />
-                      </ListItem>
-
                       <ListItem>
                        <ListItemAvatar>
                         <Avatar>
@@ -347,8 +373,9 @@ class File extends Component {
                         <Typography variant="h5" component="h5">
                           Add a permission
                         </Typography>
-                        <FormControl className={classes.formControl}>
-                          <InputLabel id="select-targetType-label">Target Type</InputLabel>
+                        <div>
+                        <FormControl variant="outlined" className={classes.formControl}>
+                          <InputLabel id="select-targetType-label" variant="outlined">Target Type</InputLabel>
                           <Select
                             labelId="select-targetType-label"
                             id="select-targetType"
@@ -359,7 +386,8 @@ class File extends Component {
                             <MenuItem value={"GROUP"}>Group</MenuItem>
                           </Select>
                         </FormControl>
-                        <FormControl className={classes.formControl}>
+                        </div>
+                        <FormControl variant="outlined" className={classes.formControl}>
                           <InputLabel id="select-permission-label">Permission</InputLabel>
                           <Select
                             labelId="select-permission-label"
@@ -376,7 +404,7 @@ class File extends Component {
                             options={users}
                             getOptionLabel={(users) => users.username}
                             getOptionDisabled={(option) => option === users[0]}
-                            style={{ width: 300 }}
+                            className={classes.formControl}
                             onChange={this.onChangeTargetName}
                             renderInput={(params) =>
                               <TextField {...params} margin="normal" label="Username" variant="outlined"/>
@@ -386,7 +414,7 @@ class File extends Component {
                           <Autocomplete
                             options={groups}
                             getOptionLabel={(groups) => groups.name}
-                            style={{ width: 300 }}
+                            className={classes.formControl}
                             onChange={this.onChangeTargetName}
                             renderInput={(params) =>
                               <TextField {...params} margin="normal" label="Group" variant="outlined"/>
@@ -406,35 +434,7 @@ class File extends Component {
                       </div>
                     )
                   }
-                </CardContent>
-                <CardActions>
-                    <Button
-                     color="primary"
-                     type="submit"
-                     className={classes.button}
-                     startIcon={<GetAppIcon />}
-                     onClick={() => this.downloadFile(currentFile.id)}
-                   >
-                     Download
-                   </Button>
-                   <Button
-                     color="primary"
-                     aria-label="Edit File"
-                     className={classes.button}
-                     component={Link} to={"/files/" + currentFile.id + "/edit"}
-                     startIcon={<EditIcon />}
-                   >
-                    Edit
-                   </Button>
-                    <Button
-                     color="secondary"
-                     className={classes.button}
-                     startIcon={<DeleteIcon />}
-                     onClick={this.deleteFile}
-                   >
-                     Delete
-                   </Button>
-                </CardActions>
+                </CardContent>                
                 </Card>
             )}
           </div>
