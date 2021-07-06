@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import FolderDataService from '../services/folder.service';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensitySelector, GridToolbarFilterButton, GridToolbarContainer, GridColDef } from '@material-ui/data-grid';
-import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from '@material-ui/icons/Add';
-import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 import { styles } from '../css-common'
 import { Button, Icon, IconButton, withStyles } from '@material-ui/core';
-import { blue } from "@material-ui/core/colors";
+import EditIcon from "@material-ui/icons/Edit";
+import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import SubdirectoryArrowLeftIcon from '@material-ui/icons/SubdirectoryArrowLeft';
+import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+
 
 class FoldersList extends Component {
   constructor(props) {
@@ -40,8 +43,14 @@ class FoldersList extends Component {
   CustomToolbar() {
     return (
       <GridToolbarContainer>
-        <Button color="primary" startIcon={<CreateNewFolderIcon />} component={Link} to={"/add-folders"}>
+        <Button color="primary" startIcon={<CloudUploadIcon />} component={Link} to={"/upload/files"}>
+          Upload
+        </Button>
+        <Button color="primary" startIcon={<CreateNewFolderIcon />} component={Link} to={"/create/folders"}>
           New Folder
+        </Button>
+        <Button color="primary" startIcon={<SubdirectoryArrowRightIcon />} component={Link} to={"/move"}>
+          Move
         </Button>
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
@@ -78,18 +87,53 @@ class FoldersList extends Component {
       {
         field: '',
         headerName: 'Action',
-        width: 100,
+        width: 170,
         sortable: false,
         renderCell: (params) => (
           <div>
-            <Button
-              color="primary"
-              aria-label="Edit Folder"
-              component={Link} to={"/folders/edit/" + params.row.id}
-              startIcon={<EditIcon />}
-            >
-              EDIT
-            </Button>
+              {params.row.type == 'Folder' ? (
+                <div>
+                  <Button
+                    color="primary"
+                    aria-label="See Details"
+                    component={Link} to={"/folders/" + params.row.id}
+                    startIcon={<VisibilityIcon />}
+                  >
+                  </Button>
+                  <Button
+                    color="primary"
+                    aria-label="Edit Folder"
+                    component={Link} to={"/folders/" + params.row.id +  + "/edit"}
+                    startIcon={<EditIcon />}
+                  >
+                  </Button>
+                  <Button
+                    color="primary"
+                    aria-label="See Subdirectory"
+                    component={Link} to={"/content/folders/" + params.row.id}
+                    startIcon={<SubdirectoryArrowLeftIcon />}
+                  >
+                  </Button>
+                </div>
+              ) : (
+                <div>
+                  <Button
+                    color="primary"
+                    aria-label="See Details"
+                    component={Link} to={"/files/" + params.row.id}
+                    startIcon={<VisibilityIcon />}
+                  >
+                  </Button>
+                  <Button
+                    color="primary"
+                    aria-label="Edit File"
+                    component={Link} to={"/files/" + params.row.id + "/edit"}
+                    startIcon={<EditIcon />}
+                  >
+                  </Button>
+                </div>
+              )
+              }
           </div>
         ),
       }

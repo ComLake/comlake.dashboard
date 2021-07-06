@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import ContentDataService from '../services/content.service';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensitySelector, GridToolbarFilterButton, GridToolbarContainer, GridColDef } from '@material-ui/data-grid';
-import EditIcon from "@material-ui/icons/Edit";
-import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 import { styles } from '../css-common'
 import { ButtonGroup, Button, IconButton, Icon, withStyles } from '@material-ui/core';
-import { DropzoneDialog } from 'material-ui-dropzone'
+
+import EditIcon from "@material-ui/icons/Edit";
+import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SubdirectoryArrowLeftIcon from '@material-ui/icons/SubdirectoryArrowLeft';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
