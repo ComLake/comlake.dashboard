@@ -3,11 +3,12 @@ import GroupDataService from "../services/group.service";
 import UserDataService from "../services/user.service";
 
 import { styles } from "../css-common"
-import { Card, TextField, CardHeader, CardContent,
+import { Avatar, Card, TextField, CardHeader, CardContent,
   Button, CardActions, Paper, Chip, withStyles } from "@material-ui/core";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import AddIcon from '@material-ui/icons/Add';
 import FaceIcon from '@material-ui/icons/Face';
+import PeopleIcon from '@material-ui/icons/People';
 
 class GroupAddUser extends Component {
     constructor(props) {
@@ -21,8 +22,8 @@ class GroupAddUser extends Component {
                 id: null,
                 users: [],
             },
-            users:[],
-            username: null,
+            users: [],
+            username: null
         };
     }
 
@@ -67,7 +68,7 @@ class GroupAddUser extends Component {
             this.state.username
         )
             .then(response => {
-                this.props.history.push("/admin/groups");
+                window.location.reload();
             })
             .catch(e => {
                 console.log(e);
@@ -82,19 +83,14 @@ class GroupAddUser extends Component {
             {currentGroup && (
                 <Card>
                 <CardHeader
-                  title={"Add Member to Group #" + currentGroup.id}
-                  />
+                  avatar={
+                    <Avatar aria-label="groupname">
+                      <PeopleIcon />
+                    </Avatar>
+                  }
+                  title={currentGroup.name}
+                />
                 <CardContent>
-                    <div>
-                        <TextField
-                            className={classes.textField}
-                            name="name"
-                            variant="outlined"
-                            margin="normal"
-                            value={currentGroup.name}
-                            disabled
-                        />
-                    </div>
                     <Paper variant="outlined" component="ul" className={classes.chipContainer}>
                       {currentGroup.users.map((data, index) => (
                           <li key={index}>

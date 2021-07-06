@@ -65,9 +65,7 @@ class GroupsLimited extends Component {
           }
           return result.join(", ");
         }
-      },
-      { field: 'createdDate', headerName: 'Created Date', width: 200 },
-      { field: 'lastModifiedDate', headerName: 'Last Modified Date', width: 200 }
+      }
     ];
     return (
       <div style={{ height: 400, width: '100%' }}>

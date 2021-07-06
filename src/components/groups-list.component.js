@@ -73,7 +73,7 @@ class GroupsList extends Component {
     };
     const columns = [
       { field: 'name', headerName: 'Name', width: 150 },
-      { field: 'users', headerName: 'Users', width: 200,
+      { field: 'users', headerName: 'Users', width: 400,
         valueGetter: (params) => {
           let result = [];
           if (params.row.users) {
@@ -84,8 +84,6 @@ class GroupsList extends Component {
           return result.join(", ");
         }
       },
-      { field: 'createdDate', headerName: 'Created Date', width: 200 },
-      { field: 'lastModifiedDate', headerName: 'Last Modified Date', width: 200 },
       {
         field: '',
         headerName: 'Actions',
