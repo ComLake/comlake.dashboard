@@ -32,6 +32,20 @@ class AclDataService {
     return axios.delete(API_URL + `file/group?fileId=${fileId}` + `&groupName=${groupName}` + `&perm=${perm}`, { headers: authHeader() });
   }
 
+  grantFolderPermissionForUser(folderId, username, perm){
+    return axios.put(API_URL + `folder/user?folderId=${folderId}` + `&username=${username}` + `&perm=${perm}`, null, { headers: authHeader() });
+  }
 
+  grantFolderPermissionForGroup(folderId, groupName, perm){
+    return axios.put(API_URL + `folder/group?folderId=${folderId}` + `&groupName=${groupName}` + `&perm=${perm}`, null, { headers: authHeader() });
+  }
+
+  removeFolderPermissionForUser(folderId, username, perm){
+    return axios.delete(API_URL + `folder/user?folderId=${folderId}` + `&username=${username}` + `&perm=${perm}`, { headers: authHeader() });
+  }
+
+  removeFolderPermissionForGroup(folderId, groupName, perm){
+    return axios.delete(API_URL + `folder/group?folderId=${folderId}` + `&groupName=${groupName}` + `&perm=${perm}`, { headers: authHeader() });
+  }
 }
 export default new AclDataService();

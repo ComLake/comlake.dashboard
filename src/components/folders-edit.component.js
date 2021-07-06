@@ -9,7 +9,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LabelIcon from '@material-ui/icons/Label';
 
-class Folder extends Component {
+class FolderEdit extends Component {
     constructor(props) {
         super(props);
         this.onChangeName = this.onChangeName.bind(this);
@@ -236,4 +236,4 @@ class Folder extends Component {
     }
 }
 
-export default withStyles(styles)(Folder)
+export default withStyles(styles)(FolderEdit)

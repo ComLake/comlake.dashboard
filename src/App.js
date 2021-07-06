@@ -33,8 +33,9 @@ import Group from "./components/groups-edit.component";
 import GroupAddUser from "./components/groups-addUser.component";
 
 import AddFolder from "./components/folders-add.component";
-import Folder from "./components/folders-edit.component";
+import FolderEdit from "./components/folders-edit.component";
 import FoldersList from "./components/folders-list.component";
+import Folder from "./components/folders-details.component";
 
 import UploadFiles from "./components/files-upload.component";
 import FilesList from "./components/files-list.component";
@@ -253,11 +254,13 @@ class App extends Component {
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/upload/files' component={UploadFiles} />
             <PrivateRoute authenticated={this.state.authenticated}
+              path='/folders/:id' component={Folder} />
+            <PrivateRoute authenticated={this.state.authenticated}
               path='/files/:id/edit' component={FileEdit} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/create/folders' component={AddFolder} />
             <PrivateRoute authenticated={this.state.authenticated}
-              path='/folders/:id/edit' component={Folder} />
+              path='/folders/:id/edit' component={FolderEdit} />
             <PrivateRoute authenticated={this.state.authenticated}
               path='/folders/:id' component={FoldersList} />
             <PrivateRoute authenticated={this.state.authenticated}
