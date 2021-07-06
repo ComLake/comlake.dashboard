@@ -266,7 +266,7 @@ class Folder extends Component {
                        color="primary"
                        aria-label="Edit Folder"
                        className={classes.button}
-                       component={Link} to={"/folders/" + currentFolder.id + "/edit"}
+                       component={Link} to={"/edit/folders/" + currentFolder.id}
                        startIcon={<EditIcon />}
                      >
                       Edit

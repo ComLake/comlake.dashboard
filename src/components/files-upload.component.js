@@ -109,8 +109,7 @@ class AddFile extends Component {
                 isError: false,
                 submitted: true
               });
-              console.log(response.data);
-              console.log("fileId " + this.state.fileId);
+
               if (folderId != null && this.state.fileId != null){
                 ContentDataService.addFileToFolder(folderId, this.state.fileId)
                 .then(response => {
@@ -120,7 +119,6 @@ class AddFile extends Component {
                   console.log(e);
                 });
               }
-              this.props.history.push("/content");
             })
             .catch(() => {
               this.setState({
@@ -129,6 +127,7 @@ class AddFile extends Component {
               });
           });
       });
+      this.props.history.push("/content");
     }
 
     render() {

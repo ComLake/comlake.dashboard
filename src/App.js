@@ -47,6 +47,7 @@ import ContentSearch from "./components/content-search.component";
 import ContentMove from "./components/content-move.component";
 
 import AclsList from "./components/acls-list.component";
+import GrantAcl from "./components/acls-grant.component";
 
 class App extends Component {
   constructor(props) {
@@ -270,6 +271,8 @@ class App extends Component {
               exact path='/search' component={ContentSearch} />
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/acls' component={AclsList} />
+            <PrivateRoute authenticated={this.state.authenticated}
+              exact path='/grant/acls' component={GrantAcl} />
           </Switch>
         </main>
       </div>

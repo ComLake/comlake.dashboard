@@ -287,7 +287,7 @@ class File extends Component {
                      color="primary"
                      aria-label="Edit File"
                      className={classes.button}
-                     component={Link} to={"/files/" + currentFile.id + "/edit"}
+                     component={Link} to={"/edit/files/" + currentFile.id}
                      startIcon={<EditIcon />}
                    >
                     Edit
@@ -434,7 +434,7 @@ class File extends Component {
                       </div>
                     )
                   }
-                </CardContent>                
+                </CardContent>
                 </Card>
             )}
           </div>
