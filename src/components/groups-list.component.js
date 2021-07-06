@@ -37,7 +37,7 @@ class GroupsList extends Component {
   CustomToolbar() {
     return (
       <GridToolbarContainer>
-        <Button color="primary" startIcon={<AddIcon />} component={Link} to={"/groups/create"}>
+        <Button color="primary" startIcon={<AddIcon />} component={Link} to={"/create/groups"}>
           Create
         </Button>
         <GridToolbarColumnsButton />

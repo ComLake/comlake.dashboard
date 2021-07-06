@@ -38,7 +38,7 @@ class UsersList extends Component {
   CustomToolbar() {
     return (
       <GridToolbarContainer>
-        <Button color="primary" startIcon={<AddIcon />} component={Link} to={"/users/create"}>
+        <Button color="primary" startIcon={<AddIcon />} component={Link} to={"/create/users"}>
           Create
         </Button>
         <GridToolbarColumnsButton />

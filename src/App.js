@@ -233,7 +233,7 @@ class App extends Component {
             <PrivateRoute authenticated={this.state.authenticated}
               exact path='/users' component={UsersList} />
             <PrivateRoute authenticated={this.state.authenticated}
-              exact path='/users/create' component={AddUser} />
+              exact path='/create/users' component={AddUser} />
             <PrivateRoute authenticated={this.state.authenticated}
               path='/users/:id' component={User} />
             <PrivateRoute authenticated={this.state.authenticated}
@@ -241,7 +241,7 @@ class App extends Component {
             <PrivateRoute authenticated={this.state.authenticated}
                 exact path='/groups' component={GroupsLimited} />
             <PrivateRoute authenticated={this.state.authenticated}
-              exact path='/groups/create' component={AddGroup} />
+              exact path='/create/groups' component={AddGroup} />
             <PrivateRoute authenticated={this.state.authenticated}
               path='/groups/:id' component={Group} />
             <PrivateRoute authenticated={this.state.authenticated}
@@ -251,11 +251,11 @@ class App extends Component {
             <PrivateRoute authenticated={this.state.authenticated}
               path='/files/:id' component={File} />
             <PrivateRoute authenticated={this.state.authenticated}
-              exact path='/files/upload' component={UploadFiles} />
+              exact path='/upload/files' component={UploadFiles} />
             <PrivateRoute authenticated={this.state.authenticated}
               path='/files/:id/edit' component={FileEdit} />
             <PrivateRoute authenticated={this.state.authenticated}
-              exact path='/folders/create' component={AddFolder} />
+              exact path='/create/folders' component={AddFolder} />
             <PrivateRoute authenticated={this.state.authenticated}
               path='/folders/:id/edit' component={Folder} />
             <PrivateRoute authenticated={this.state.authenticated}

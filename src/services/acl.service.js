@@ -16,12 +16,20 @@ class AclDataService {
     return axios.get(API_URL + `perm/?folder=${folderId}`, { headers: authHeader() });
   }
 
-  removeFilePermissionForUser(fileId, userId, perm){
-    return axios.delete(API_URL + "file/" + `${fileId}` + "/user/" + `${userId}` + "/perm/" + `${perm}`, { headers: authHeader() });
+  grantFilePermissionForUser(fileId, username, perm){
+    return axios.put(API_URL + `file/user?fileId=${fileId}` + `&username=${username}` + `&perm=${perm}`, null, { headers: authHeader() });
   }
 
-  removeFilePermissionForGroup(fileId, groupId, perm){
-    return axios.delete(API_URL + `file/group/?fileId=${fileId}` + `?groupId=${groupId}` + `?permStr=${perm}`);
+  grantFilePermissionForGroup(fileId, groupName, perm){
+    return axios.put(API_URL + `file/group?fileId=${fileId}` + `&groupName=${groupName}` + `&perm=${perm}`, null, { headers: authHeader() });
+  }
+
+  removeFilePermissionForUser(fileId, username, perm){
+    return axios.delete(API_URL + `file/user?fileId=${fileId}` + `&username=${username}` + `&perm=${perm}`, { headers: authHeader() });
+  }
+
+  removeFilePermissionForGroup(fileId, groupName, perm){
+    return axios.delete(API_URL + `file/group?fileId=${fileId}` + `&groupName=${groupName}` + `&perm=${perm}`, { headers: authHeader() });
   }
 
 

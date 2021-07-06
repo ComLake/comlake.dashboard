@@ -120,7 +120,7 @@ class AddFile extends Component {
                   console.log(e);
                 });
               }
-              // this.props.history.push("/content");
+              this.props.history.push("/content");
             })
             .catch(() => {
               this.setState({

@@ -116,5 +116,12 @@ export const styles = theme => ({
   permContainer:{
     width: '100%',
     maxHeight: 440,
-  }
+  },
+  formControl:{
+    margin: theme.spacing(1),
+    minWidth: 240,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 });

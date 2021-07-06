@@ -72,7 +72,7 @@ class FilesList extends Component {
             <Button
               color="primary"
               aria-label="Add File to Folder"
-              component={Link} to={"/users/create/" + params.row.id}
+              component={Link} to={"/create/users/" + params.row.id}
               startIcon={<AddIcon />}
             >
               ADD
