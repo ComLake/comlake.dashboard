@@ -36,11 +36,15 @@ class File extends Component {
 
         this.getFile = this.getFile.bind(this);
         this.getFilePerms = this.getFilePerms.bind(this);
-        this.downloadFile = this.downloadFile.bind(this);
-        this.deleteFile = this.deleteFile.bind(this);
         this.retrieveUsers = this.retrieveUsers.bind(this);
         this.retrieveGroups = this.retrieveGroups.bind(this);
+
+        this.downloadFile = this.downloadFile.bind(this);
+        this.deleteFile = this.deleteFile.bind(this);
         this.grantPerm = this.grantPerm.bind(this);
+        this.removePerm = this.removePerm.bind(this);
+        this.newPerm = this.newPerm.bind(this);
+
         this.onChangeTargetType = this.onChangeTargetType.bind(this);
         this.onChangePerm = this.onChangePerm.bind(this);
         this.onChangeTargetName = this.onChangeTargetName.bind(this);
@@ -63,7 +67,8 @@ class File extends Component {
             groups: [],
             targetType: "",
             targetName: "",
-            perm: ""
+            perm: "",
+            submitted: false
         };
     }
 
@@ -134,6 +139,14 @@ class File extends Component {
           });
     }
 
+    newPerm(){
+      this.setState({
+          targetType: "",
+          targetName: "",
+          submitted: false
+      });
+    }
+
     grantPerm(){
       const targetType = this.state.targetType;
       const targetName = this.state.targetName;
@@ -143,6 +156,9 @@ class File extends Component {
       if (targetType == "USER"){
         AclDataService.grantFilePermissionForUser(fileId, targetName, perm)
             .then(response => {
+              this.setState({
+                  submitted: true
+              });
               console.log(response.data);
             })
             .catch(e => {
@@ -150,6 +166,30 @@ class File extends Component {
         });
       } else {
         AclDataService.grantFilePermissionForGroup(fileId, targetName, perm)
+            .then(response => {
+              this.setState({
+                  submitted: true
+              });
+              console.log(response.data);
+            })
+            .catch(e => {
+              console.log(e);
+        });
+      }
+    }
+
+    removePerm(targetType, targetName, perm){
+      const fileId = this.state.currentFile.id;
+      if (targetType == "USER"){
+        AclDataService.removeFilePermissionForUser(fileId, targetName, perm)
+            .then(response => {
+              console.log(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+        });
+      } else {
+        AclDataService.removeFilePermissionForGroup(fileId, targetName, perm)
             .then(response => {
               console.log(response.data);
             })
@@ -208,26 +248,14 @@ class File extends Component {
             sortable: false,
             renderCell: (params) => (
               <div>
-                  {params.row.targetType == 'USER' ? (
-                    <Button
-                      color="secondary"
-                      aria-label="Remove"
-                      component={Link} to={"/folders/" + params.row.id +  + "/edit"}
-                      startIcon={<RemoveCircleOutlineIcon />}
-                    >
-                    REMOVE
-                    </Button>
-                  ) : (
-                    <Button
-                      color="secondary"
-                      aria-label="Remove"
-                      component={Link} to={"/files/" + params.row.id + "/edit"}
-                      startIcon={<RemoveCircleOutlineIcon />}
-                    >
-                    REMOVE
-                    </Button>
-                  )
-                  }
+                  <Button
+                    color="secondary"
+                    aria-label="Remove"
+                    startIcon={<RemoveCircleOutlineIcon />}
+                    onClick={() => this.removePerm(params.row.targetType, params.row.targetId, params.row.perm)}
+                  >
+                  REMOVE
+                  </Button>
               </div>
             )
           }
@@ -303,65 +331,81 @@ class File extends Component {
                         </div>
                       </div>
                     </div>
-                    <Typography variant="h5" component="h5">
-                      Add a permission
-                    </Typography>
-                    <FormControl className={classes.formControl}>
-                      <InputLabel id="select-targetType-label">Target Type</InputLabel>
-                      <Select
-                        labelId="select-targetType-label"
-                        id="select-targetType"
-                        value={targetType}
-                        onChange={this.onChangeTargetType}
-                      >
-                        <MenuItem value={"USER"}>User</MenuItem>
-                        <MenuItem value={"GROUP"}>Group</MenuItem>
-                      </Select>
-                    </FormControl>
-                    <FormControl className={classes.formControl}>
-                      <InputLabel id="select-permission-label">Permission</InputLabel>
-                      <Select
-                        labelId="select-permission-label"
-                        id="select-permission"
-                        value={perm}
-                        onChange={this.onChangePerm}
-                      >
-                        <MenuItem value={"READ"}>Can Read</MenuItem>
-                        <MenuItem value={"WRITE"}>Can Write</MenuItem>
-                      </Select>
-                    </FormControl>
-                    {targetType == 'USER' ? (
-                      <Autocomplete
-                        options={users}
-                        getOptionLabel={(users) => users.username}
-                        getOptionDisabled={(option) => option === users[0]}
-                        style={{ width: 300 }}
-                        onChange={this.onChangeTargetName}
-                        renderInput={(params) =>
-                          <TextField {...params} margin="normal" label="Username" variant="outlined"/>
-                        }
-                      />
+                    {this.state.submitted ? (
+                        <div>
+                            <h4>You grant permission successfully!</h4>
+                            <Button
+                                size="small"
+                                color="primary"
+                                variant="contained"
+                                onClick={this.newPerm}>
+                                Grant More
+                            </Button>
+                        </div>
                     ) : (
-                      <Autocomplete
-                        options={groups}
-                        getOptionLabel={(groups) => groups.name}
-                        style={{ width: 300 }}
-                        onChange={this.onChangeTargetName}
-                        renderInput={(params) =>
-                          <TextField {...params} margin="normal" label="Group" variant="outlined"/>
+                      <div>
+                        <Typography variant="h5" component="h5">
+                          Add a permission
+                        </Typography>
+                        <FormControl className={classes.formControl}>
+                          <InputLabel id="select-targetType-label">Target Type</InputLabel>
+                          <Select
+                            labelId="select-targetType-label"
+                            id="select-targetType"
+                            value={targetType}
+                            onChange={this.onChangeTargetType}
+                          >
+                            <MenuItem value={"USER"}>User</MenuItem>
+                            <MenuItem value={"GROUP"}>Group</MenuItem>
+                          </Select>
+                        </FormControl>
+                        <FormControl className={classes.formControl}>
+                          <InputLabel id="select-permission-label">Permission</InputLabel>
+                          <Select
+                            labelId="select-permission-label"
+                            id="select-permission"
+                            value={perm}
+                            onChange={this.onChangePerm}
+                          >
+                            <MenuItem value={"READ"}>Can Read</MenuItem>
+                            <MenuItem value={"WRITE"}>Can Write</MenuItem>
+                          </Select>
+                        </FormControl>
+                        {targetType == 'USER' ? (
+                          <Autocomplete
+                            options={users}
+                            getOptionLabel={(users) => users.username}
+                            getOptionDisabled={(option) => option === users[0]}
+                            style={{ width: 300 }}
+                            onChange={this.onChangeTargetName}
+                            renderInput={(params) =>
+                              <TextField {...params} margin="normal" label="Username" variant="outlined"/>
+                            }
+                          />
+                        ) : (
+                          <Autocomplete
+                            options={groups}
+                            getOptionLabel={(groups) => groups.name}
+                            style={{ width: 300 }}
+                            onChange={this.onChangeTargetName}
+                            renderInput={(params) =>
+                              <TextField {...params} margin="normal" label="Group" variant="outlined"/>
+                            }
+                          />
+                        )
                         }
-                      />
+                        <Button
+                          color="primary"
+                          aria-label="Add Permission"
+                          variant="contained"
+                          startIcon={<AddIcon />}
+                          onClick={this.grantPerm}
+                        >
+                        ADD
+                        </Button>
+                      </div>
                     )
-                    }
-                    <Button
-                      color="primary"
-                      aria-label="Add Permission"
-                      variant="contained"
-                      startIcon={<AddIcon />}
-                      onClick={this.grantPerm}
-                    >
-                    ADD
-                    </Button>
+                  }
                 </CardContent>
                 <CardActions>
                     <Button
