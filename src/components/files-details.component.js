@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import FileDataService from "../services/file.service";
 import AclDataService from "../services/acl.service";
-import UserDataService from "../services/user.service";
-import GroupDataService from "../services/group.service";
 
 import { Link } from 'react-router-dom';
 import { styles } from "../css-common"
@@ -34,7 +32,6 @@ class File extends Component {
 
         this.getFile = this.getFile.bind(this);
         this.getFilePerms = this.getFilePerms.bind(this);
-        this.getUsernameById = this.getUsernameById.bind(this);
         this.downloadFile = this.downloadFile.bind(this);
         this.deleteFile = this.deleteFile.bind(this);
 
@@ -51,7 +48,7 @@ class File extends Component {
                 lastModifiedDate: null,
                 topics: [],
             },
-            perms: [],
+            perms: []
         };
     }
 
@@ -67,21 +64,6 @@ class File extends Component {
                     currentFile: response.data
                 });
                 console.log(response.data);
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    }
-
-    getUsernameById(userId) {
-        UserDataService.get(userId)
-            .then(response => {
-                console.log(response.data.username);
-                return(
-                  <p>
-                    {response.data.username}
-                  </p>
-                )
             })
             .catch(e => {
                 console.log(e);
@@ -123,28 +105,11 @@ class File extends Component {
     }
 
     render() {
-        const { currentFile, rowsPerPage, page, perms } = this.state;
+        const { currentFile, perms, targetNames } = this.state;
         const { classes } = this.props
         const columns = [
           { field: 'targetType', headerName: 'Type', width: 170 },
-          { field: 'targetId', headerName: 'For', width: 170,
-            renderCell: (params) => (
-              <div>
-                  {params.row.targetType == 'USER' ? (
-                    this.getUsernameById(params.row.targetId)
-                  ) : (
-                    <Button
-                      color="secondary"
-                      aria-label="Remove"
-                      component={Link} to={"/files/" + params.row.id + "/edit"}
-                      startIcon={<RemoveCircleOutlineIcon />}
-                    >
-                    </Button>
-                  )
-                  }
-              </div>
-            )
-          },
+          { field: 'targetId', headerName: 'For', width: 170},
           { field: 'perm', headerName: 'Permission', width: 170 },
           {
             field: '',
@@ -160,6 +125,7 @@ class File extends Component {
                       component={Link} to={"/folders/" + params.row.id +  + "/edit"}
                       startIcon={<RemoveCircleOutlineIcon />}
                     >
+                    REMOVE
                     </Button>
                   ) : (
                     <Button
@@ -168,6 +134,7 @@ class File extends Component {
                       component={Link} to={"/files/" + params.row.id + "/edit"}
                       startIcon={<RemoveCircleOutlineIcon />}
                     >
+                    REMOVE
                     </Button>
                   )
                   }
@@ -235,7 +202,7 @@ class File extends Component {
                     <Typography variant="h5" component="h5">
                       Permissions on this file
                     </Typography>
-                    <div style={{ height: 300, width: '100%' }}>
+                    <div style={{ height: 300, width: '100%', margin: 20 }}>
                       <div style={{ display: 'flex', height: '100%' }}>
                         <div style={{ flexGrow: 1 }}>
                         <DataGrid
@@ -246,6 +213,10 @@ class File extends Component {
                         </div>
                       </div>
                     </div>
+                    <Typography variant="h5" component="h5">
+                      Add a permission
+                    </Typography>
+
                 </CardContent>
                 <CardActions>
                     <Button
