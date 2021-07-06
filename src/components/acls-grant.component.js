@@ -3,6 +3,8 @@ import AclDataService from "../services/acl.service";
 import ContentDataService from "../services/content.service";
 import FileDataService from "../services/file.service";
 import FolderDataService from "../services/folder.service";
+import UserDataService from "../services/user.service";
+import GroupDataService from "../services/group.service";
 
 import { FormHelperText, Select, FormControl, InputLabel, MenuItem, Card, CardHeader, CardContent, CardActions, TextField, Button, Chip, withStyles } from "@material-ui/core"
 import SaveIcon from '@material-ui/icons/Save';
@@ -13,25 +15,30 @@ import { styles } from "../css-common"
 class GrantAcl extends Component {
     constructor(props) {
         super(props);
-        this.onChangeFolderId = this.onChangeFolderId.bind(this);
-        this.onChangeFileId = this.onChangeFileId.bind(this);
-        this.onChangeSubfolderId = this.onChangeSubfolderId.bind(this);
-        this.onChangeType = this.onChangeType.bind(this);
+        this.onChangeSourceType = this.onChangeSourceType.bind(this);
+        this.onChangeTargetType = this.onChangeTargetType.bind(this);
+        this.onChangePerm = this.onChangePerm.bind(this);
+        this.onChangeSourceId = this.onChangeSourceId.bind(this);
+        this.onChangeTargetName = this.onChangeTargetName.bind(this);
 
-        this.move = this.move.bind(this);
+        this.grantPerm = this.grantPerm.bind(this);
 
         this.state = {
-            id: null,
-            folderId: "",
-            fileId: "",
-            subfolderId: "",
-            type: "",
+            perm: "",
+            targetType: "",
+            sourceType: "",
+            sourceId: "",
+            targetName: "",
             files: [],
-            folders: []
+            folders: [],
+            users: [],
+            groups: []
         };
     }
 
     componentDidMount() {
+        this.retrieveUsers();
+        this.retrieveGroups();
         this.retrieveFiles();
         this.retrieveFolders();
     }
@@ -60,81 +67,152 @@ class GrantAcl extends Component {
         });
     }
 
-    onChangeFolderId(event, value) {
-        this.setState({
-            folderId: value.id
+    retrieveUsers() {
+      UserDataService.getAll()
+        .then(response => {
+          this.setState({
+            users: response.data
+          });
+        })
+        .catch(e => {
+          console.log(e);
         });
     }
 
-    onChangeFileId(event, value) {
-        this.setState({
-            fileId: value.id
+    retrieveGroups() {
+      GroupDataService.getAll()
+        .then(response => {
+          this.setState({
+            groups: response.data
+          });
+        })
+        .catch(e => {
+          console.log(e);
         });
     }
 
-    onChangeSubfolderId(event, value) {
-        this.setState({
-            subfolderId: value.id
-        });
-    }
-
-    move() {
-      if (this.state.type == "FILE") {
-        ContentDataService.addFileToFolder(this.state.folderId, this.state.fileId)
-            .then(response => {
-                this.props.history.push("/content");
+    grantPerm() {
+      const {sourceId, sourceType, targetType, targetName, perm} = this.state;
+      if (sourceType == "FILE") {
+        if (targetType == "USER"){
+          AclDataService.grantFilePermissionForUser(sourceId, targetName, perm)
+              .then(response => {
                 console.log(response.data);
-            })
-            .catch(e => {
+              })
+              .catch(e => {
+                  console.log(e);
+          });
+        } else {
+          AclDataService.grantFilePermissionForGroup(sourceId, targetName, perm)
+              .then(response => {
+                console.log(response.data);
+              })
+              .catch(e => {
                 console.log(e);
-            });
+          });
+        }
       } else {
-        ContentDataService.addSubfolderToFolder(this.state.folderId, this.state.subfolderId)
-            .then(response => {
-                this.props.history.push("/content");
+        if (targetType == "USER"){
+          AclDataService.grantFolderPermissionForUser(sourceId, targetName, perm)
+              .then(response => {
                 console.log(response.data);
-            })
-            .catch(e => {
+              })
+              .catch(e => {
+                  console.log(e);
+          });
+        } else {
+          AclDataService.grantFolderPermissionForGroup(sourceId, targetName, perm)
+              .then(response => {
+                console.log(response.data);
+              })
+              .catch(e => {
                 console.log(e);
-            });
+          });
+        }
       }
     }
 
-    onChangeType(e) {
+    onChangeSourceType(e) {
         this.setState({
-            type: e.target.value
+            sourceType: e.target.value
+        });
+    }
+
+    onChangeTargetType(e) {
+        this.setState({
+            targetType: e.target.value
+        });
+    }
+
+    onChangePerm(e){
+      this.setState({
+          perm: e.target.value
+      });
+    }
+
+    onChangeSourceId(event, value) {
+        this.setState({
+            sourceId: value.id
+        });
+    }
+
+    onChangeTargetName(event, value) {
+        this.setState({
+            targetName: value.id
         });
     }
 
     render() {
-        const { files, folders, type } = this.state;
+        const { files, folders, users, groups, sourceId, targetType, targetName, Type, sourceType, perm } = this.state;
         const { classes } = this.props
         return (
             <React.Fragment>
               <Card>
               <CardHeader
-                title="Move"
+                title="Grant Permission"
                 />
               <CardContent>
                   <FormControl variant="outlined" className={classes.formControl}>
                     <Select
-                      id="select-type"
-                      value={type}
-                      onChange={this.onChangeType}
+                      id="select-sourceType"
+                      value={targetType}
+                      onChange={this.onChangeTargetType}
+                    >
+                      <MenuItem value={"USER"}>User</MenuItem>
+                      <MenuItem value={"GROUP"}>Group</MenuItem>
+                    </Select>
+                    <FormHelperText>Grant User or Group?</FormHelperText>
+                  </FormControl>
+                  <FormControl variant="outlined" className={classes.formControl}>
+                    <Select
+                      id="select-sourceType"
+                      value={sourceType}
+                      onChange={this.onChangeSourceType}
                     >
                       <MenuItem value={"FILE"}>File</MenuItem>
                       <MenuItem value={"FOLDER"}>Folder</MenuItem>
                     </Select>
-                    <FormHelperText>Move File or Folder?</FormHelperText>
+                    <FormHelperText>For File or Folder?</FormHelperText>
                   </FormControl>
-                  {type == 'FILE' ? (
+                  <FormControl variant="outlined" className={classes.formControl}>
+                    <Select
+                      id="select-sourceType"
+                      value={perm}
+                      onChange={this.onChangePerm}
+                    >
+                      <MenuItem value={"READ"}>Can Read</MenuItem>
+                      <MenuItem value={"WRITE"}>Can Write</MenuItem>
+                    </Select>
+                    <FormHelperText>Permission?</FormHelperText>
+                  </FormControl>
+                  {sourceType == 'FILE' ? (
                     <Autocomplete
                       options={files}
                       getOptionLabel={(files) => files.name}
                       className={classes.formControl}
-                      onChange={this.onChangeFileId}
+                      onChange={this.onChangeSourceId}
                       renderInput={(params) =>
-                        <TextField {...params} margin="normal" label="From File" variant="outlined"/>
+                        <TextField {...params} margin="normal" label="Which File?" variant="outlined"/>
                       }
                     />
                   ) : (
@@ -142,22 +220,35 @@ class GrantAcl extends Component {
                       options={folders}
                       getOptionLabel={(folders) => folders.name}
                       className={classes.formControl}
-                      onChange={this.onChangeSubfolderId}
+                      onChange={this.onChangeSourceId}
                       renderInput={(params) =>
-                        <TextField {...params} margin="normal" label="From Folder" variant="outlined"/>
+                        <TextField {...params} margin="normal" label="Which Folder?" variant="outlined"/>
                       }
                     />
                   )
                   }
-                  <Autocomplete
-                    options={folders}
-                    getOptionLabel={(folders) => folders.name}
-                    className={classes.formControl}
-                    onChange={this.onChangeFolderId}
-                    renderInput={(params) =>
-                      <TextField {...params} margin="normal" label="To Folder" variant="outlined"/>
-                    }
-                  />
+                  {targetType == 'USER' ? (
+                    <Autocomplete
+                      options={users}
+                      getOptionLabel={(users) => users.username}
+                      className={classes.formControl}
+                      onChange={this.onChangeTargetName}
+                      renderInput={(params) =>
+                        <TextField {...params} margin="normal" label="For Which User?" variant="outlined"/>
+                      }
+                    />
+                  ) : (
+                    <Autocomplete
+                      options={groups}
+                      getOptionLabel={(groups) => groups.name}
+                      className={classes.formControl}
+                      onChange={this.onChangeTargetName}
+                      renderInput={(params) =>
+                        <TextField {...params} margin="normal" label="For Which Group?" variant="outlined"/>
+                      }
+                    />
+                  )
+                  }
                 </CardContent>
                 <CardActions>
                     <Button
@@ -165,7 +256,7 @@ class GrantAcl extends Component {
                         color="primary"
                         variant="contained"
                         startIcon={<SaveIcon />}
-                        onClick={this.move}>
+                        onClick={this.grantPerm}>
                         Submit
                     </Button>
                   </CardActions>
