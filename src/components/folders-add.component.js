@@ -97,29 +97,32 @@ class AddFolder extends Component {
         FolderDataService.create(data)
             .then(response => {
                 this.setState({
+                    subfolderId: response.data.id,
                     name: response.data.name,
                     source: response.data.source,
                     topics: response.data.topics,
                     language: response.data.language,
-                    subfolderId: response.data.id,
 
                     submitted: true
                 });
                 console.log(response.data);
-                console.log("fileId " + this.state.fileId);
-                if (folderId != null && this.state.subfolderId != null){
-                  ContentDataService.addSubfolderToFolder(folderId, this.state.subfolderId)
-                  .then(response => {
-                    console.log(response.data);
-                  })
-                  .catch(e => {
-                    console.log(e);
-                  });
-                }
+                console.log("folderId " + this.state.folderId);
+                console.log("subfolderId " + this.state.subfolderId);
+                // if (folderId != null && this.state.subfolderId != null){
+                //   ContentDataService.addSubfolderToFolder(folderId, this.state.subfolderId)
+                //   .then(response => {
+                //     console.log(response.data);
+                //   })
+                //   .catch(e => {
+                //     console.log(e);
+                //   });
+                // }
             })
             .catch(e => {
                 console.log(e);
             });
+
+        this.props.history.push("/content");
     }
 
     newFolder() {
@@ -213,14 +216,6 @@ class AddFolder extends Component {
                                     required
                                   />
                                 )}
-                              />
-                              <Autocomplete
-                                options={folders}
-                                getOptionLabel={(folders) => folders.name}
-                                onChange={this.onChangeFolder}
-                                renderInput={(params) =>
-                                  <TextField {...params} margin="normal" label="Upload To Folder?" variant="outlined"/>
-                                }
                               />
                             </div>
                           </CardContent>

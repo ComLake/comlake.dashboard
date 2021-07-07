@@ -20,6 +20,7 @@ class AddFile extends Component {
         this.onChangeFolder = this.onChangeFolder.bind(this);
         this.uploadFiles = this.uploadFiles.bind(this);
         this.retrieveFolders = this.retrieveFolders.bind(this);
+        this.addFileToFolder = this.addFileToFolder.bind(this);
 
         this.state = {
             id: null,
@@ -95,9 +96,18 @@ class AddFile extends Component {
         });
     }
 
+    addFileToFolder(fileId) {
+      ContentDataService.addFileToFolder(this.state.folderId, fileId)
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    }
+
     uploadFiles() {
         const files = this.state.files;
-        const folderId = this.state.folderId;
 
         files.forEach((file) => {
           console.log(file);
@@ -109,16 +119,6 @@ class AddFile extends Component {
                 isError: false,
                 submitted: true
               });
-
-              if (folderId != null && this.state.fileId != null){
-                ContentDataService.addFileToFolder(folderId, this.state.fileId)
-                .then(response => {
-                  console.log(response.data);
-                })
-                .catch(e => {
-                  console.log(e);
-                });
-              }
             })
             .catch(() => {
               this.setState({
@@ -142,14 +142,6 @@ class AddFile extends Component {
                 <CardContent>
                 <Grid container spacing={5}>
                   <Grid item xs={12} sm={6} lg={6}>
-                        <Autocomplete
-                          options={folders}
-                          getOptionLabel={(folders) => folders.name}
-                          onChange={this.onChangeFolder}
-                          renderInput={(params) =>
-                            <TextField {...params} margin="normal" label="Upload To Folder?" variant="outlined"/>
-                          }
-                        />
                         <TextField
                             label="Source"
                             name="source"
