@@ -99,7 +99,6 @@ class Register extends Component {
 
     return (
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
         <div className={classes.paperAuth}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
